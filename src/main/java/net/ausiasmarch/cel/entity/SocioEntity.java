@@ -29,24 +29,38 @@ public class SocioEntity {
     @Email
     private String email;
 
+    @Size(min = 0, max = 15)
+    private String telefono;
+
+    @Lob
+    @Column(name = "fotoDNI")
+    private byte[] fotoDNI; 
+
+   
+   
+
     public SocioEntity() {
     }
 
-    public SocioEntity(String DNI,String nombre, String apellido1, String apellido2, String email) {
+    public SocioEntity(String DNI,String nombre, String apellido1, String apellido2, String email, String telefono, byte[] fotoDNI) {
         this.DNI = DNI;
         this.nombre = nombre;
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.email = email;
+        this.telefono = telefono;
+        this.fotoDNI = fotoDNI;
     }
 
-    public SocioEntity(Long id,String DNI,String nombre, String apellido1, String apellido2, String email) {
+    public SocioEntity(Long id,String DNI,String nombre, String apellido1, String apellido2, String email, String telefono, byte[] fotoDNI) {
         this.id = id;
         this.DNI = DNI;
         this.nombre = nombre;
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.email = email;
+        this.telefono = telefono;
+        this.fotoDNI = fotoDNI;
     }
 
     public Long getId() {
@@ -98,5 +112,20 @@ public class SocioEntity {
         this.email = email;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public byte[] getFotoDNI() {
+        return fotoDNI;
+    }
+
+    public void setFotoDNI(byte[] fotoDNI) {
+        this.fotoDNI = fotoDNI;
+    }
 }
     
