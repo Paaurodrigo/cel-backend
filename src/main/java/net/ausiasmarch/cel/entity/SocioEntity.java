@@ -127,5 +127,7 @@ public class SocioEntity {
     public void setFotoDNI(byte[] fotoDNI) {
         this.fotoDNI = fotoDNI;
     }
+
+   
 }
     

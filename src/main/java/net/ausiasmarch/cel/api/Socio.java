@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -73,6 +74,18 @@ public class Socio {
     public ResponseEntity<SocioEntity> getSocio(@PathVariable Long id) {
         return new ResponseEntity<SocioEntity>(oSocioService.get(id), HttpStatus.OK);
     }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> obtenerImagen(@PathVariable Long id) {
+        // Buscar el socio directamente, ya que findById lanza la excepción si no lo encuentra
+        SocioEntity oSocio = oSocioService.findById(id);
+        
+        // Retornar la imagen como respuesta HTTP
+        return ResponseEntity.ok()
+            .contentType(MediaType.IMAGE_PNG)
+            .body(oSocio.getFotoDNI());
+    }
+    
 
     @PostMapping("/new-with-photo")
     public ResponseEntity<SocioEntity> createWithFoto(

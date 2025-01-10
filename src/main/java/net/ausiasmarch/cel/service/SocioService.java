@@ -6,6 +6,9 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.annotation.Resource;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import net.ausiasmarch.cel.entity.SocioEntity;
@@ -175,5 +178,12 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
         return oSocioRepository.findById((long) oRandomService.getRandomInt(1, (int) (long) this.count())).get();
     }
 
+    public SocioEntity findById(Long id) {
+        return oSocioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+    }
+    
+    
+    
 
 }
