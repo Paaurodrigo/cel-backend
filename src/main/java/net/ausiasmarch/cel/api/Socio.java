@@ -85,33 +85,6 @@ public class Socio {
             .contentType(MediaType.IMAGE_PNG)
             .body(oSocio.getFotoDNI());
     }
-    
-
-    @PostMapping("/new-with-photo")
-    public ResponseEntity<SocioEntity> createWithFoto(
-            @RequestParam("DNI") String DNI,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("apellido1") String apellido1,
-            @RequestParam("apellido2") String apellido2,
-            @RequestParam("email") String email,
-            @RequestParam("telefono") String telefono,
-            @RequestParam("file") MultipartFile file) {
-        try {
-            // Convertir el archivo MultipartFile a un arreglo de bytes
-            byte[] fotoBytes = file.getBytes();
-
-            // Crear el objeto SocioEntity con la foto incluida
-            SocioEntity oSocioEntity = new SocioEntity(DNI, nombre, apellido1, apellido2, email, telefono, fotoBytes);
-
-            // Llamar al servicio para guardar el socio
-            SocioEntity savedSocio = oSocioService.create(oSocioEntity);
-
-            return new ResponseEntity<>(savedSocio, HttpStatus.CREATED);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // Si ocurre un error al procesar el archivo
-        }
-    }
-
     @PostMapping("")
     public ResponseEntity<SocioEntity> update(@RequestBody SocioEntity oSocioEntity) {
         return new ResponseEntity<SocioEntity>(oSocioService.update(oSocioEntity), HttpStatus.OK);
