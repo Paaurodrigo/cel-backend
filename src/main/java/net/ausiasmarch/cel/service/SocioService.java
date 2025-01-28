@@ -82,7 +82,8 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
             oSocioEntity.setEmail(oSocioEntity.getNombre() + oRandomService.getRandomInt(999, 9999) + "@gmail.com");
             oSocioEntity.setTelefono("6" + oRandomService.getRandomInt(999, 9999));
             oSocioEntity.setFotoDNI(null);
-
+            oSocioEntity.setCodigopostal(oRandomService.getRandomInt(9999, 99999));
+            oSocioEntity.setDireccionfiscal("Av. " + oRandomService.getRandomInt(999, 9999) + ", " + oRandomService.getRandomInt(999, 9999) + ", " + oRandomService.getRandomInt(999, 9999));
             oSocioRepository.save(oSocioEntity);
         }
         return oSocioRepository.count();
@@ -93,8 +94,8 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
 
         if (filter.isPresent()) {
             return oSocioRepository
-                    .findByDNIContainingOrNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContainingOrTelefonoContaining(
-                            filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(),
+                    .findByDNIContainingOrNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContainingOrTelefonoContainingOrDireccionfiscalContainingOrCodigopostalContaining(
+                            filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(),
                             oPageable);
         } else {
             return oSocioRepository.findAll(oPageable);
@@ -165,6 +166,13 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
         }
         if (oSocioEntity.getFotoDNI() != null) {
             oSocioEntityFromDatabase.setFotoDNI(oSocioEntity.getFotoDNI());
+        }
+        if (oSocioEntity.getCodigopostal() != null) {
+            oSocioEntityFromDatabase.setCodigopostal(oSocioEntity.getCodigopostal());   
+        }
+        if (oSocioEntity.getDireccionfiscal() != null) {
+            oSocioEntityFromDatabase.setDireccionfiscal(oSocioEntity.getDireccionfiscal());
+            
         }
         return oSocioRepository.save(oSocioEntityFromDatabase);
     }

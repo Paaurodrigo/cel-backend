@@ -9,8 +9,8 @@ import net.ausiasmarch.cel.entity.InmuebleEntity;
 
 public interface InmuebleRepository extends JpaRepository<InmuebleEntity, Long> {
     
-     Page<InmuebleEntity> findByCupsContainingOrDireccionContaining(
-            String filter2, String filter3,  Pageable oPageable);
+     Page<InmuebleEntity> findByCupsContainingOrDireccionContainingOrCodigopostalContainingOrMunicipioContainingOrRefcatasContainingOrPotencia1ContainingOrPotencia2ContainingOrTensionContainingOrUsoContaining(
+            String filter2, String filter3,String filter4, String filter5, String filter6, String filter7, String filter8, String filter9, String filter10,  Pageable oPageable);
             
-                Optional<InmuebleEntity> findByCups(Long cups);
+             
 }

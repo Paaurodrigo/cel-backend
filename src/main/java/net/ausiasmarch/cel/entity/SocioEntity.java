@@ -23,12 +23,14 @@ public class SocioEntity {
     @Size(min = 3, max = 255)
     private String apellido1;
 
+    @NotNull
     @Size(min = 0, max = 255)
     private String apellido2;
 
     @Email
     private String email;
 
+    @NotNull
     @Size(min = 0, max = 15)
     private String telefono;
 
@@ -36,13 +38,20 @@ public class SocioEntity {
     @Column(name = "fotoDNI")
     private byte[] fotoDNI; 
 
+    @NotNull
+    @Size(min = 0, max = 255)
+    private String direccionfiscal;
+
+    @NotNull
+    private Integer codigopostal;
+
    
    
 
     public SocioEntity() {
     }
 
-    public SocioEntity(String DNI,String nombre, String apellido1, String apellido2, String email, String telefono, byte[] fotoDNI) {
+    public SocioEntity(String DNI,String nombre, String apellido1, String apellido2, String email, String telefono, byte[] fotoDNI, String direccionfiscal, Integer codigopostal) {
         this.DNI = DNI;
         this.nombre = nombre;
         this.apellido1 = apellido1;
@@ -50,9 +59,11 @@ public class SocioEntity {
         this.email = email;
         this.telefono = telefono;
         this.fotoDNI = fotoDNI;
+        this.direccionfiscal = direccionfiscal;
+        this.codigopostal = codigopostal;
     }
 
-    public SocioEntity(Long id,String DNI,String nombre, String apellido1, String apellido2, String email, String telefono, byte[] fotoDNI) {
+    public SocioEntity(Long id,String DNI,String nombre, String apellido1, String apellido2, String email, String telefono, byte[] fotoDNI, String direccionfiscal, Integer codigopostal) {
         this.id = id;
         this.DNI = DNI;
         this.nombre = nombre;
@@ -61,6 +72,8 @@ public class SocioEntity {
         this.email = email;
         this.telefono = telefono;
         this.fotoDNI = fotoDNI;
+        this.direccionfiscal = direccionfiscal;
+        this.codigopostal = codigopostal;
     }
 
     public Long getId() {
@@ -126,6 +139,22 @@ public class SocioEntity {
 
     public void setFotoDNI(byte[] fotoDNI) {
         this.fotoDNI = fotoDNI;
+    }
+
+    public String getDireccionfiscal() {
+        return direccionfiscal;
+    }
+
+    public void setDireccionfiscal(String direccionfiscal) {
+        this.direccionfiscal = direccionfiscal;
+    }
+
+    public Integer getCodigopostal() {
+        return codigopostal;
+    }    
+
+    public void setCodigopostal(Integer codigopostal) {
+        this.codigopostal = codigopostal;
     }
 
    
