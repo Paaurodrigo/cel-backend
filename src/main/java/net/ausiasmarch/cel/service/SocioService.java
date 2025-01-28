@@ -12,7 +12,9 @@ import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import net.ausiasmarch.cel.entity.SocioEntity;
+import net.ausiasmarch.cel.entity.TipoSocioEntity;
 import net.ausiasmarch.cel.repository.SocioRepository;
+import net.ausiasmarch.cel.repository.TipoSocioRepository;
 
 @Service
 public class SocioService implements ServiceInterface<SocioEntity>{
@@ -22,6 +24,9 @@ public class SocioService implements ServiceInterface<SocioEntity>{
 
     @Autowired
     RandomService oRandomService;
+
+    @Autowired
+    TipoSocioRepository oTipoSocioRepository;
 
    
     
@@ -190,7 +195,13 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
         return oSocioRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
     }
+
+   
     
+    public TipoSocioEntity findTipoSocioById(Long id) {
+        return oTipoSocioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("TipoSocio no encontrado"));
+    }
     
     
 

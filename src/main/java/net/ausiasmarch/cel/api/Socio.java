@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.ausiasmarch.cel.service.SocioService;
 import net.ausiasmarch.cel.entity.SocioEntity;
+import net.ausiasmarch.cel.entity.TipoSocioEntity;
+
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RequestMapping("/socio")
@@ -28,6 +30,8 @@ public class Socio {
 
     @Autowired
     SocioService oSocioService;
+
+
 
     @GetMapping("")
     public ResponseEntity<Page<SocioEntity>> getPage(
@@ -44,11 +48,16 @@ public class Socio {
             @RequestParam("email") String email,
             @RequestParam("telefono") String telefono,
             @RequestParam("dni") String dni,
+            @RequestParam("direccionfiscal") String direccionfiscal,
+            @RequestParam("codigopostal") Integer codigopostal,
+            @RequestParam("tiposocio") Long tiposocioId, // Recibimos el ID del tipo de socio
             @RequestParam("fotoDni") MultipartFile fotoDni) throws IOException {
-
+    
         // Convertir el archivo a un arreglo de bytes
         byte[] fotoDniBytes = fotoDni.getBytes();
-
+    
+        // Buscar el TiposocioEntity usando el ID recibido
+        TipoSocioEntity tiposocio = oSocioService.findTipoSocioById(tiposocioId);
         // Crear la entidad SocioEntity
         SocioEntity oSocioEntity = new SocioEntity();
         oSocioEntity.setNombre(nombre);
@@ -58,12 +67,16 @@ public class Socio {
         oSocioEntity.setTelefono(telefono);
         oSocioEntity.setDNI(dni);
         oSocioEntity.setFotoDNI(fotoDniBytes);  // Asignamos el archivo convertido
-
+        oSocioEntity.setDireccionfiscal(direccionfiscal);
+        oSocioEntity.setCodigopostal(codigopostal);
+        oSocioEntity.setTiposocio(tiposocio);
+    
         // Guardar el socio en la base de datos
         SocioEntity savedSocio = oSocioService.create(oSocioEntity);
-
+    
         return new ResponseEntity<>(savedSocio, HttpStatus.CREATED);
     }
+    
 
     @PutMapping("/random/{cantidad}")
     public ResponseEntity<Long> create(@PathVariable Long cantidad) {

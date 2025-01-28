@@ -1,5 +1,7 @@
 package net.ausiasmarch.cel.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -36,7 +38,7 @@ public class SocioEntity {
 
     @Lob
     @Column(name = "fotoDNI")
-    private byte[] fotoDNI; 
+    private byte[] fotoDNI;
 
     @NotNull
     @Size(min = 0, max = 255)
@@ -45,13 +47,15 @@ public class SocioEntity {
     @NotNull
     private Integer codigopostal;
 
-   
-   
+    @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
+    @JoinColumn(name = "tiposocio")
+    private TipoSocioEntity tiposocio;
 
     public SocioEntity() {
     }
 
-    public SocioEntity(String DNI,String nombre, String apellido1, String apellido2, String email, String telefono, byte[] fotoDNI, String direccionfiscal, Integer codigopostal) {
+    public SocioEntity(String DNI, String nombre, String apellido1, String apellido2, String email, String telefono,
+            byte[] fotoDNI, String direccionfiscal, Integer codigopostal, TipoSocioEntity tiposocio) {
         this.DNI = DNI;
         this.nombre = nombre;
         this.apellido1 = apellido1;
@@ -61,9 +65,11 @@ public class SocioEntity {
         this.fotoDNI = fotoDNI;
         this.direccionfiscal = direccionfiscal;
         this.codigopostal = codigopostal;
+        this.tiposocio = tiposocio;
     }
 
-    public SocioEntity(Long id,String DNI,String nombre, String apellido1, String apellido2, String email, String telefono, byte[] fotoDNI, String direccionfiscal, Integer codigopostal) {
+    public SocioEntity(Long id, String DNI, String nombre, String apellido1, String apellido2, String email,
+            String telefono, byte[] fotoDNI, String direccionfiscal, Integer codigopostal, TipoSocioEntity tiposocio) {
         this.id = id;
         this.DNI = DNI;
         this.nombre = nombre;
@@ -74,6 +80,8 @@ public class SocioEntity {
         this.fotoDNI = fotoDNI;
         this.direccionfiscal = direccionfiscal;
         this.codigopostal = codigopostal;
+        this.tiposocio = tiposocio;
+
     }
 
     public Long getId() {
@@ -99,7 +107,6 @@ public class SocioEntity {
     public void setDNI(String DNI) {
         this.DNI = DNI;
     }
-
 
     public String getApellido1() {
         return apellido1;
@@ -151,12 +158,18 @@ public class SocioEntity {
 
     public Integer getCodigopostal() {
         return codigopostal;
-    }    
+    }
 
     public void setCodigopostal(Integer codigopostal) {
         this.codigopostal = codigopostal;
     }
 
-   
+    public TipoSocioEntity getTiposocio() {
+        return tiposocio;
+    }   
+
+    public void setTiposocio(TipoSocioEntity tiposocio) {
+        this.tiposocio = tiposocio;
+    }
+
 }
-    
