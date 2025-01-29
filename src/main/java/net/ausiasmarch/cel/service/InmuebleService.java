@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
+import net.ausiasmarch.cel.repository.SocioRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,15 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
 
     @Autowired
     RandomService oRandomService;
+
+    @Autowired
+    SocioRepository oSocioRepository;
+
+    @Autowired
+    public InmuebleService(InmuebleRepository oInmuebleRepository, SocioRepository oSocioRepository) {
+        this.oInmuebleRepository = oInmuebleRepository;
+        this.oSocioRepository = oSocioRepository; // Inyección de dependencia
+    }
 
     private String[] arrCalles = {
        "Calle",
@@ -60,6 +71,32 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
         return oInmuebleRepository.count();
     }
 
+
+    /*public Page<InmuebleEntity> getPageXSocio(Pageable oPageable, Optional<String> filter, Optional<Long> id_socio) {
+        if (filter.isPresent()) {
+            if (id_socio.isPresent()) {
+                String filtro = "%" + filter.get() + "%"; // Agregar comodines para LIKE
+                return oInmuebleRepository
+                        .findBySocioIdAndCupsContainingOrDireccionContainingOrCodigopostalContainingOrMunicipioContainingOrRefcatasContainingOrPotencia1ContainingOrPotencia2ContainingOrTensionContainingOrUsoContaining(
+                                id_socio.get(), 
+                                filtro, filtro, filtro, filtro, filtro, filtro, filtro, filtro, filtro, oPageable);
+            } else {
+                throw new ResourceNotFoundException("Socio no encontrado");
+            }
+        } else {
+            if (id_socio.isPresent()) {
+                SocioEntity socio = oSocioRepository.findById(id_socio.get())
+                    .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
+                return oInmuebleRepository.findById_socio(socio, oPageable);
+            } else {
+                throw new ResourceNotFoundException("Socio no encontrado");
+            }
+            
+        }
+    }
+    */
+    
+    
 
      public Page<InmuebleEntity> getPage(Pageable oPageable, Optional<String> filter) {
 

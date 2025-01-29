@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.validation.constraints.NotNull;
@@ -67,6 +69,9 @@ public class InmuebleEntity {
     @Size(min = 3, max = 255)
     private String recomendacion;
 
+ @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
+    @JoinColumn(name = "id_socio")
+    private SocioEntity id_socio;
 
 
     public InmuebleEntity() {
@@ -87,7 +92,7 @@ public class InmuebleEntity {
         this.recomendacion = recomendacion;
     }
 
-    public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion) {
+    public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity id_socio) {
         this.id = id;
         this.cups = cups;
         this.direccion = direccion;
@@ -102,6 +107,7 @@ public class InmuebleEntity {
         this.habitos = habitos;
         this.intencion = intencion;
         this.recomendacion = recomendacion;
+        this.id_socio = id_socio;
     }
 
     public Long getId() {
@@ -188,6 +194,14 @@ public class InmuebleEntity {
     public void setRecomendacion(String recomendacion) {
         this.recomendacion = recomendacion;
     }   
+
+    public SocioEntity getSocio() {
+        return id_socio;
+    }
+
+    public void setSocio(SocioEntity id_socio) {
+        this.id_socio = id_socio;
+    }
 
 
    
