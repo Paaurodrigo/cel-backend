@@ -1,5 +1,7 @@
 package net.ausiasmarch.cel.entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
@@ -51,7 +53,12 @@ public class SocioEntity {
     @JoinColumn(name = "tiposocio")
     private TipoSocioEntity tiposocio;
 
+    @OneToMany(mappedBy = "id_socio",fetch = FetchType.LAZY)
+    private java.util.List<InmuebleEntity> inmuebles;
+
+   
     public SocioEntity() {
+        this.inmuebles = new java.util.ArrayList<>();
     }
 
     public SocioEntity(String DNI, String nombre, String apellido1, String apellido2, String email, String telefono,
@@ -171,5 +178,10 @@ public class SocioEntity {
     public void setTiposocio(TipoSocioEntity tiposocio) {
         this.tiposocio = tiposocio;
     }
+
+    public int getInmuebles() {
+        return inmuebles.size();
+    }
+
 
 }

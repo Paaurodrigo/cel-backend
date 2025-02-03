@@ -5,9 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import net.ausiasmarch.cel.api.Socio;
 
 @Entity
 @Table(name = "instalacion")
@@ -36,6 +39,7 @@ public class InstalacionEntity {
     private Integer preciokw;
 
 
+
     public InstalacionEntity() {
     }
 
@@ -46,6 +50,7 @@ public class InstalacionEntity {
         this.potenciatotal = potenciatotal;
         this.potenciadisponible = potenciadisponible;
         this.preciokw = preciokw;
+        
     }
 
     public InstalacionEntity(Long id,String nombre, Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw) {
@@ -56,6 +61,7 @@ public class InstalacionEntity {
         this.potenciatotal = potenciatotal;
         this.potenciadisponible = potenciadisponible;
         this.preciokw = preciokw;
+      
     }
 
     public Long getId() {
@@ -114,5 +120,6 @@ public class InstalacionEntity {
         this.preciokw = preciokw;
     }
 
+   
 
 }

@@ -73,10 +73,12 @@ public class InmuebleEntity {
     @JoinColumn(name = "id_socio")
     private SocioEntity id_socio;
 
+  
+
 
     public InmuebleEntity() {
     }
-    public InmuebleEntity(String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion) {
+    public InmuebleEntity(String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity id_socio) {
         this.cups = cups;
         this.direccion = direccion;
         this.codigopostal = codigopostal;
@@ -90,6 +92,7 @@ public class InmuebleEntity {
         this.habitos = habitos;
         this.intencion = intencion;
         this.recomendacion = recomendacion;
+        this.id_socio = id_socio;
     }
 
     public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity id_socio) {

@@ -11,8 +11,12 @@ import jakarta.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import net.ausiasmarch.cel.api.Inmueble;
+import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.entity.TipoSocioEntity;
+import net.ausiasmarch.cel.repository.InmuebleRepository;
 import net.ausiasmarch.cel.repository.SocioRepository;
 import net.ausiasmarch.cel.repository.TipoSocioRepository;
 
@@ -27,6 +31,9 @@ public class SocioService implements ServiceInterface<SocioEntity>{
 
     @Autowired
     TipoSocioRepository oTipoSocioRepository;
+
+    @Autowired
+    InmuebleRepository oInmuebleRepository;
 
    
     
@@ -202,6 +209,12 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
         return oTipoSocioRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("TipoSocio no encontrado"));
     }
+
+    public Page<InmuebleEntity> getInmueblesbySocio(Long id,Pageable oPageable) {
+        return oInmuebleRepository.findBySocio_Id(id,oPageable);
+    }
+
+
     
     
 
