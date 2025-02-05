@@ -19,9 +19,9 @@ public interface ServiceInterface<T>{
 
     public Long delete(Long id);
 
-    public T create(T oUsuarioEntity);
+    public T create(T oSocioEntity);
 
-    public T update(T oUsuarioEntity);
+    public T update(T oSocioEntity);
 
     public Long deleteAll();
 

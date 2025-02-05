@@ -153,6 +153,8 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
     }
 
     public SocioEntity create(SocioEntity oSocioEntity) {
+      //  oSocioEntity.setTiposocio(TipoSocioRepository.findById(2L) //poner socios como clientes
+      //  .orElseThrow(() -> new RuntimeException("TipoSocio no encontrado")));
         return oSocioRepository.save(oSocioEntity);
     }
 

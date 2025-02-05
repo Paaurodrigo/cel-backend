@@ -63,13 +63,14 @@ public class SocioEntity {
         this.inmuebles = new java.util.ArrayList<>();
     }
 
-    public SocioEntity(String DNI, String nombre, String apellido1, String apellido2, String email, String telefono,
+    public SocioEntity(String DNI, String nombre, String apellido1, String apellido2, String email,String password, String telefono,
             byte[] fotoDNI, String direccionfiscal, Integer codigopostal, TipoSocioEntity tiposocio) {
         this.DNI = DNI;
         this.nombre = nombre;
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.email = email;
+        this.password = password;
         this.telefono = telefono;
         this.fotoDNI = fotoDNI;
         this.direccionfiscal = direccionfiscal;
@@ -77,7 +78,7 @@ public class SocioEntity {
         this.tiposocio = tiposocio;
     }
 
-    public SocioEntity(Long id, String DNI, String nombre, String apellido1, String apellido2, String email,
+    public SocioEntity(Long id, String DNI, String nombre, String apellido1, String apellido2, String email,String password,
             String telefono, byte[] fotoDNI, String direccionfiscal, Integer codigopostal, TipoSocioEntity tiposocio) {
         this.id = id;
         this.DNI = DNI;
@@ -85,6 +86,7 @@ public class SocioEntity {
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.email = email;
+        this.password = password;
         this.telefono = telefono;
         this.fotoDNI = fotoDNI;
         this.direccionfiscal = direccionfiscal;

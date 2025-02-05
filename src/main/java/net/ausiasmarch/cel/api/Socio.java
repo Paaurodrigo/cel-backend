@@ -46,6 +46,7 @@ public class Socio {
             @RequestParam("apellido1") String apellido1,
             @RequestParam("apellido2") String apellido2,
             @RequestParam("email") String email,
+            @RequestParam("password") String password,
             @RequestParam("telefono") String telefono,
             @RequestParam("dni") String dni,
             @RequestParam("direccionfiscal") String direccionfiscal,
@@ -64,6 +65,7 @@ public class Socio {
         oSocioEntity.setApellido1(apellido1);
         oSocioEntity.setApellido2(apellido2);
         oSocioEntity.setEmail(email);
+        oSocioEntity.setPassword(password);
         oSocioEntity.setTelefono(telefono);
         oSocioEntity.setDNI(dni);
         oSocioEntity.setFotoDNI(fotoDniBytes);  // Asignamos el archivo convertido
