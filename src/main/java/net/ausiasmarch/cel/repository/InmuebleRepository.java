@@ -19,6 +19,12 @@ public interface InmuebleRepository extends JpaRepository<InmuebleEntity, Long> 
    
             Page<InmuebleEntity> findBySocio_Id(Long socioId, Pageable pageable);
 
+            @Query(value = "SELECT * FROM inmueble WHERE (cups LIKE %:strCups% OR direccion LIKE %:strDireccion%) AND id_socio=:id_socio", nativeQuery = true)
+            Page<InmuebleEntity> findBySocioIdAndCupsContainingOrDireccionContaining(
+                    Long id_socio, String strCups, String strDireccion, Pageable oPageable);
+        
+            
+
 
 
 }

@@ -53,10 +53,12 @@ public class SocioEntity {
     @JoinColumn(name = "tiposocio")
     private TipoSocioEntity tiposocio;
 
-    @OneToMany(mappedBy = "id_socio",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "socio",fetch = FetchType.LAZY)
     private java.util.List<InmuebleEntity> inmuebles;
 
-   
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+
     public SocioEntity() {
         this.inmuebles = new java.util.ArrayList<>();
     }
@@ -181,6 +183,14 @@ public class SocioEntity {
 
     public int getInmuebles() {
         return inmuebles.size();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 

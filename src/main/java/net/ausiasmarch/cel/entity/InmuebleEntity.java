@@ -71,14 +71,14 @@ public class InmuebleEntity {
 
  @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "id_socio")
-    private SocioEntity id_socio;
+    private SocioEntity socio;
 
   
 
 
     public InmuebleEntity() {
     }
-    public InmuebleEntity(String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity id_socio) {
+    public InmuebleEntity(String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio) {
         this.cups = cups;
         this.direccion = direccion;
         this.codigopostal = codigopostal;
@@ -92,10 +92,10 @@ public class InmuebleEntity {
         this.habitos = habitos;
         this.intencion = intencion;
         this.recomendacion = recomendacion;
-        this.id_socio = id_socio;
+        this.socio = socio;
     }
 
-    public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity id_socio) {
+    public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio) {
         this.id = id;
         this.cups = cups;
         this.direccion = direccion;
@@ -110,7 +110,7 @@ public class InmuebleEntity {
         this.habitos = habitos;
         this.intencion = intencion;
         this.recomendacion = recomendacion;
-        this.id_socio = id_socio;
+        this.socio = socio;
     }
 
     public Long getId() {
@@ -199,11 +199,11 @@ public class InmuebleEntity {
     }   
 
     public SocioEntity getSocio() {
-        return id_socio;
+        return socio;
     }
 
-    public void setSocio(SocioEntity id_socio) {
-        this.id_socio = id_socio;
+    public void setSocio(SocioEntity socio) {
+        this.socio = socio;
     }
 
 

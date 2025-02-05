@@ -3,6 +3,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
+import net.ausiasmarch.cel.exception.ResourceNotFoundException;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
 import net.ausiasmarch.cel.repository.SocioRepository;
 
@@ -70,33 +71,7 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
         }
         return oInmuebleRepository.count();
     }
-
-
-    /*public Page<InmuebleEntity> getPageXSocio(Pageable oPageable, Optional<String> filter, Optional<Long> id_socio) {
-        if (filter.isPresent()) {
-            if (id_socio.isPresent()) {
-                String filtro = "%" + filter.get() + "%"; // Agregar comodines para LIKE
-                return oInmuebleRepository
-                        .findBySocioIdAndCupsContainingOrDireccionContainingOrCodigopostalContainingOrMunicipioContainingOrRefcatasContainingOrPotencia1ContainingOrPotencia2ContainingOrTensionContainingOrUsoContaining(
-                                id_socio.get(), 
-                                filtro, filtro, filtro, filtro, filtro, filtro, filtro, filtro, filtro, oPageable);
-            } else {
-                throw new ResourceNotFoundException("Socio no encontrado");
-            }
-        } else {
-            if (id_socio.isPresent()) {
-                SocioEntity socio = oSocioRepository.findById(id_socio.get())
-                    .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado"));
-                return oInmuebleRepository.findById_socio(socio, oPageable);
-            } else {
-                throw new ResourceNotFoundException("Socio no encontrado");
-            }
-            
-        }
-    }
-    */
-    
-    
+  
 
      public Page<InmuebleEntity> getPage(Pageable oPageable, Optional<String> filter) {
 
@@ -109,6 +84,26 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
             return oInmuebleRepository.findAll(oPageable);
         }
     }
+
+
+    public Page<InmuebleEntity> getPageXSocio(Pageable oPageable, Optional<String> filter, Optional<Long> id_socio) {
+        if (filter.isPresent()) {
+            if (id_socio.isPresent()) {
+                return oInmuebleRepository
+                        .findBySocioIdAndCupsContainingOrDireccionContaining(
+                                id_socio.get(), filter.get(), filter.get(), oPageable);
+            } else {
+                throw new ResourceNotFoundException("Socio no encontrado");
+            }            
+        } else {
+            if (id_socio.isPresent()) {
+                return oInmuebleRepository.findBySocio_Id(id_socio.get(), oPageable);
+            } else {
+                throw new ResourceNotFoundException("Socio no encontrado");
+            }
+        }
+    }
+
 
     public InmuebleEntity get(Long id) {
         return oInmuebleRepository.findById(id).get();

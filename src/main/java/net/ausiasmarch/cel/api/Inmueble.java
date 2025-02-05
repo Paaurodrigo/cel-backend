@@ -38,16 +38,16 @@ public class Inmueble {
         return new ResponseEntity<Page<InmuebleEntity>>(oInmuebleService.getPage(oPageable, filter), HttpStatus.OK);
     }
 
-    /* 
-    @GetMapping("xtipoinmueble/{id}")
-    public ResponseEntity<Page<InmuebleEntity>> getPageXTipoInmueble(
+     
+    @GetMapping("xsocio/{id}")
+    public ResponseEntity<Page<InmuebleEntity>> getPageXSocio(
             Pageable oPageable,
             @RequestParam Optional<String> filter,
             @PathVariable Optional<Long> id) {
-        return new ResponseEntity<Page<InmuebleEntity>>(oInmuebleService.getPageXInmueble(oPageable, filter, id),
+        return new ResponseEntity<Page<InmuebleEntity>>(oInmuebleService.getPageXSocio(oPageable, filter, id),
                 HttpStatus.OK);
     }
-*/
+
     @PutMapping("/new")
     public ResponseEntity<InmuebleEntity> create(@RequestBody InmuebleEntity oInmuebleEntity) {
         return new ResponseEntity<InmuebleEntity>(oInmuebleService.create(oInmuebleEntity), HttpStatus.OK);

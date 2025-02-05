@@ -106,8 +106,8 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
 
         if (filter.isPresent()) {
             return oSocioRepository
-                    .findByDNIContainingOrNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContainingOrTelefonoContainingOrDireccionfiscalContainingOrCodigopostalContaining(
-                            filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(),
+                    .findByDNIContainingOrNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContainingOrTelefonoContainingOrDireccionfiscalContainingOrCodigopostalContainingOrInmueblesContaining(
+                            filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(),filter.get(),
                             oPageable);
         } else {
             return oSocioRepository.findAll(oPageable);
