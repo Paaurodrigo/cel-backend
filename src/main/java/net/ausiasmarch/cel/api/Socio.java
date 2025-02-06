@@ -47,6 +47,7 @@ public class Socio {
 
     @PutMapping("/new")
     public ResponseEntity<SocioEntity> createSocio(
+       
             @RequestParam("nombre") String nombre,
             @RequestParam("apellido1") String apellido1,
             @RequestParam("apellido2") String apellido2,
@@ -57,14 +58,13 @@ public class Socio {
             @RequestParam("direccionfiscal") String direccionfiscal,
             @RequestParam("codigopostal") Integer codigopostal,
             @RequestParam("tiposocio") Long tiposocioId, // Recibimos el ID del tipo de socio
-            @RequestParam("fotoDni") MultipartFile fotoDni) throws IOException {
-    
+            @RequestParam("fotoDni") MultipartFile fotoDni) throws IOException { 
         // Convertir el archivo a un arreglo de bytes
         byte[] fotoDniBytes = fotoDni.getBytes();
                 System.out.println(password);
         // Buscar el TiposocioEntity usando el ID recibido
         TipoSocioEntity tiposocio = oSocioService.findTipoSocioById(tiposocioId);
-        // Crear la entidad SocioEntity
+        // Crear la entidad SocioEntity  
         SocioEntity oSocioEntity = new SocioEntity();
         oSocioEntity.setNombre(nombre);
         oSocioEntity.setApellido1(apellido1);
@@ -82,8 +82,48 @@ public class Socio {
         SocioEntity savedSocio = oSocioService.create(oSocioEntity);
     
         return new ResponseEntity<>(savedSocio, HttpStatus.CREATED);
+        
     }
     
+    @PutMapping("/new/byadmin")
+    public ResponseEntity<SocioEntity> createSocioByAdmin(
+       
+            @RequestParam("nombre") String nombre,
+            @RequestParam("apellido1") String apellido1,
+            @RequestParam("apellido2") String apellido2,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("telefono") String telefono,
+            @RequestParam("dni") String dni,
+            @RequestParam("direccionfiscal") String direccionfiscal,
+            @RequestParam("codigopostal") Integer codigopostal,
+            @RequestParam("tiposocio") Long tiposocioId, // Recibimos el ID del tipo de socio
+            @RequestParam("fotoDni") MultipartFile fotoDni) throws IOException { 
+        // Convertir el archivo a un arreglo de bytes
+        byte[] fotoDniBytes = fotoDni.getBytes();
+                System.out.println(password);
+        // Buscar el TiposocioEntity usando el ID recibido
+        TipoSocioEntity tiposocio = oSocioService.findTipoSocioById(tiposocioId);
+        // Crear la entidad SocioEntity  
+        SocioEntity oSocioEntity = new SocioEntity();
+        oSocioEntity.setNombre(nombre);
+        oSocioEntity.setApellido1(apellido1);
+        oSocioEntity.setApellido2(apellido2);
+        oSocioEntity.setEmail(email);
+        oSocioEntity.setPassword(password);
+        oSocioEntity.setTelefono(telefono);
+        oSocioEntity.setDNI(dni);
+        oSocioEntity.setFotoDNI(fotoDniBytes);  // Asignamos el archivo convertido
+        oSocioEntity.setDireccionfiscal(direccionfiscal);
+        oSocioEntity.setCodigopostal(codigopostal);
+        oSocioEntity.setTiposocio(tiposocio);
+    
+        // Guardar el socio en la base de datos
+        SocioEntity savedSocio = oSocioService.createByAdmin(oSocioEntity);
+    
+        return new ResponseEntity<>(savedSocio, HttpStatus.CREATED);
+        
+    }
 
     @PutMapping("/random/{cantidad}")
     public ResponseEntity<Long> create(@PathVariable Long cantidad) {

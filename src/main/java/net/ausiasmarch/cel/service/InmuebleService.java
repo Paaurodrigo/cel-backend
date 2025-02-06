@@ -77,8 +77,8 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
 
         if (filter.isPresent()) {
             return oInmuebleRepository
-                    .findByCupsContainingOrDireccionContainingOrCodigopostalContainingOrMunicipioContainingOrRefcatasContainingOrPotencia1ContainingOrPotencia2ContainingOrTensionContainingOrUsoContaining(
-                            filter.get(), filter.get(),filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), 
+                    .findByCupsContainingOrDireccionContainingOrCodigopostalContainingOrMunicipioContainingOrRefcatasContainingOrPotencia1ContainingOrPotencia2ContainingOrTensionContainingOrUsoContainingOrConsumoAnualContainingOrHabitosContainingOrIntencionContaining(
+                            filter.get(), filter.get(),filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), 
                             oPageable);
         } else {
             return oInmuebleRepository.findAll(oPageable);

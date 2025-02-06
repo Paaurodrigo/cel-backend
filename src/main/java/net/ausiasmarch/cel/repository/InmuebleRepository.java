@@ -13,8 +13,13 @@ import net.ausiasmarch.cel.entity.SocioEntity;
 
 public interface InmuebleRepository extends JpaRepository<InmuebleEntity, Long> {
     
-     Page<InmuebleEntity> findByCupsContainingOrDireccionContainingOrCodigopostalContainingOrMunicipioContainingOrRefcatasContainingOrPotencia1ContainingOrPotencia2ContainingOrTensionContainingOrUsoContaining(
-            String filter2, String filter3,String filter4, String filter5, String filter6, String filter7, String filter8, String filter9, String filter10,  Pageable oPageable);
+     Page<InmuebleEntity> findByCupsContainingOrDireccionContainingOrCodigopostalContainingOrMunicipioContainingOrRefcatasContainingOrPotencia1ContainingOrPotencia2ContainingOrTensionContainingOrUsoContainingOrConsumoAnualContainingOrHabitosContainingOrIntencionContaining(
+            String filter2, String filter3,String filter4, 
+            String filter5, String filter6, String filter7, 
+            String filter8, String filter9, String filter10, 
+            String filter11, String filter12, String filter13, 
+            
+            Pageable oPageable);
 
    
             Page<InmuebleEntity> findBySocio_Id(Long socioId, Pageable pageable);
