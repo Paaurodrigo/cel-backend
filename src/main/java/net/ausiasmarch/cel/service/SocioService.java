@@ -16,6 +16,8 @@ import net.ausiasmarch.cel.api.Inmueble;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.entity.TipoSocioEntity;
+import net.ausiasmarch.cel.exception.ResourceNotFoundException;
+import net.ausiasmarch.cel.exception.UnauthorizedAccessException;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
 import net.ausiasmarch.cel.repository.SocioRepository;
 import net.ausiasmarch.cel.repository.TipoSocioRepository;
@@ -35,7 +37,14 @@ public class SocioService implements ServiceInterface<SocioEntity>{
     @Autowired
     InmuebleRepository oInmuebleRepository;
 
-   
+    @Autowired
+    AuthService oAuthService;
+
+
+    @Autowired
+    public SocioService(TipoSocioRepository tipoSocioRepository) {
+        this.oTipoSocioRepository = tipoSocioRepository;
+    }
     
 
     private String[] arrNombres = {
@@ -153,8 +162,8 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
     }
 
     public SocioEntity create(SocioEntity oSocioEntity) {
-      //  oSocioEntity.setTiposocio(TipoSocioRepository.findById(2L) //poner socios como clientes
-      //  .orElseThrow(() -> new RuntimeException("TipoSocio no encontrado")));
+       oSocioEntity.setTiposocio(oTipoSocioRepository.findById(2L)
+        .orElseThrow(() -> new RuntimeException("TipoSocio no encontrado")));
         return oSocioRepository.save(oSocioEntity);
     }
 
@@ -214,6 +223,16 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
 
     public Page<InmuebleEntity> getInmueblesbySocio(Long id,Pageable oPageable) {
         return oInmuebleRepository.findBySocio_Id(id,oPageable);
+    }
+
+    public SocioEntity getByEmail(String email) {
+        SocioEntity oSocioEntity = oSocioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("El Socio con email " + email + " no existe"));
+       if (oAuthService.isMiembroWithItsOwnData(oSocioEntity.getId()) || oAuthService.isAdmin() ) {
+            return oSocioEntity;
+        } else {
+           throw new UnauthorizedAccessException("No tienes permisos para ver el Socio");
+       }
     }
 
 

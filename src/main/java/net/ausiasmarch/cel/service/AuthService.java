@@ -39,6 +39,7 @@ public class AuthService {
         Map<String, String> claims = new HashMap<>();
         claims.put("email", email);
         claims.put("nombre", oSocioRepository.findByEmail(email).get().getNombre());
+        claims.put("apellido1", oSocioRepository.findByEmail(email).get().getApellido1());
         return claims;
     };
 
@@ -63,26 +64,21 @@ public class AuthService {
         return this.getSocioFromToken().getTiposocio().getId() == 1L;
     }
 
-    public boolean isContable() {
+    public boolean isMiembro() {
         return this.getSocioFromToken().getTiposocio().getId() == 2L;
     }
 
-    public boolean isAuditor() {
-        return this.getSocioFromToken().getTiposocio().getId() == 3L;
+  
+
+    public boolean isAdminOrMiembro() {
+        return this.isAdmin() || this.isMiembro();
     }
 
-    public boolean isAdminOrContable() {
-        return this.isAdmin() || this.isContable();
-    }
-
-    public boolean isContableWithItsOwnData(Long id) {
+    public boolean isMiembroWithItsOwnData(Long id) {
         SocioEntity oSocioEntity = this.getSocioFromToken();
-        return this.isContable() && oSocioEntity.getId() == id;
+        return this.isMiembro() && oSocioEntity.getId() == id;
     }
 
-    public boolean isAuditorWithItsOwnData(Long id) {
-        SocioEntity oSocioEntity = this.getSocioFromToken();
-        return this.isAuditor() && oSocioEntity.getId() == id;
-    }
+
 
 }

@@ -40,6 +40,11 @@ public class Socio {
         return new ResponseEntity<Page<SocioEntity>>(oSocioService.getPage(oPageable, filter), HttpStatus.OK);
     }
 
+    @GetMapping("/byemail/{email}")
+    public ResponseEntity<SocioEntity> getSocioByEmail(@PathVariable(value = "email") String email) {
+        return ResponseEntity.ok(oSocioService.getByEmail(email));
+    }
+
     @PutMapping("/new")
     public ResponseEntity<SocioEntity> createSocio(
             @RequestParam("nombre") String nombre,
@@ -56,7 +61,7 @@ public class Socio {
     
         // Convertir el archivo a un arreglo de bytes
         byte[] fotoDniBytes = fotoDni.getBytes();
-    
+                System.out.println(password);
         // Buscar el TiposocioEntity usando el ID recibido
         TipoSocioEntity tiposocio = oSocioService.findTipoSocioById(tiposocioId);
         // Crear la entidad SocioEntity
