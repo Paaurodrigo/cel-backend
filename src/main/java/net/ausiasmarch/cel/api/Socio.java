@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.ausiasmarch.cel.service.SocioService;
+import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.entity.TipoSocioEntity;
 
@@ -154,4 +155,16 @@ public class Socio {
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return new ResponseEntity<Long>(oSocioService.delete(id), HttpStatus.OK);
     }
+
+    @PutMapping("/{id}/add-inmueble")
+public ResponseEntity<SocioEntity> addInmueble(
+        @PathVariable Long id,
+        @RequestBody InmuebleEntity inmueble) {
+    
+    SocioEntity updatedSocio = oSocioService.addInmueble(id, inmueble);
+    
+    return ResponseEntity.ok(updatedSocio);
+}
+
+
 }

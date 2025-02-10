@@ -1,5 +1,6 @@
 package net.ausiasmarch.cel.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -27,7 +28,14 @@ public interface InmuebleRepository extends JpaRepository<InmuebleEntity, Long> 
             @Query(value = "SELECT * FROM inmueble WHERE (cups LIKE %:strCups% OR direccion LIKE %:strDireccion%) AND id_socio=:id_socio", nativeQuery = true)
             Page<InmuebleEntity> findBySocioIdAndCupsContainingOrDireccionContaining(
                     Long id_socio, String strCups, String strDireccion, Pageable oPageable);
+
+                    @Query("SELECT i FROM InmuebleEntity i WHERE i.socio.id = 0")
+                    List<InmuebleEntity> findInmueblesSinSocio();
+                    
         
+    @Query(value = "SELECT b.* FROM inmueble b, conexion g WHERE b.id = g.inmueble and g.instalacion=:instalacion", nativeQuery = true)
+    Page<InmuebleRepository> findAllXInstalacion(Long instalacion, Pageable oPageable);
+
             
 
 

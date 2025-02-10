@@ -1,5 +1,6 @@
 package net.ausiasmarch.cel.service;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.Random;
@@ -243,6 +244,24 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
        }
     }
 
+
+ public SocioEntity addInmueble(Long socioId, InmuebleEntity inmueble) {
+    SocioEntity socio = oSocioRepository.findById(socioId)
+            .orElseThrow(() -> new RuntimeException("Socio no encontrado"));
+
+    // Verifica que la lista de inmuebles no sea null
+    if (socio.getInmuebles() == null) {
+        socio.setInmuebles(new ArrayList<>()); // ✅ Inicializa si es null
+    }
+
+    // Asociar el inmueble con el socio
+    inmueble.setSocio(socio);
+    socio.getInmuebles().add(inmueble);
+
+    // Guardar cambios en la BD
+    oInmuebleRepository.save(inmueble);
+    return oSocioRepository.save(socio);
+}
 
     
     

@@ -1,5 +1,6 @@
 package net.ausiasmarch.cel.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,7 +55,7 @@ public class SocioEntity {
     private TipoSocioEntity tiposocio;
 
     @OneToMany(mappedBy = "socio",fetch = FetchType.LAZY)
-    private java.util.List<InmuebleEntity> inmuebles;
+    private java.util.List<InmuebleEntity> inmuebles = new ArrayList<>();
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -183,9 +184,22 @@ public class SocioEntity {
         this.tiposocio = tiposocio;
     }
 
-    public int getInmuebles() {
-        return inmuebles.size();
+    // Devuelve la cantidad de inmuebles como int
+public int getNumeroInmuebles() {
+    return inmuebles.size();  
+}
+
+// Devuelve la lista de inmuebles para modificarla si es necesario
+@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Evita que se serialice en JSON
+public List<InmuebleEntity> getInmuebles() {
+    return inmuebles;
+}
+
+
+    public void setInmuebles(List<InmuebleEntity> inmuebles) {
+        this.inmuebles = inmuebles;
     }
+
 
     public String getPassword() {
         return password;

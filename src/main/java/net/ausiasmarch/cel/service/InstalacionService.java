@@ -68,7 +68,7 @@ public class InstalacionService {
     }
 
         public InstalacionEntity create(InstalacionEntity oInstalacionEntity) {
-           
+            oInstalacionEntity.setPotenciaDisponible(oInstalacionEntity.getPotenciaTotal()); // O el valor que sea necesario
                 return oInstalacionRepository.save(oInstalacionEntity);
         
         }
@@ -109,7 +109,7 @@ public class InstalacionService {
         return oInstalacionRepository.findById((long) oRandomService.getRandomInt(1, (int) (long) this.count())).get();
     }
 
-
+   
 
 
 }

@@ -2,11 +2,13 @@ package net.ausiasmarch.cel.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -38,9 +40,11 @@ public class InstalacionEntity {
     @NotNull
     private Integer preciokw;
 
-
+    @OneToMany(mappedBy = "instalacion", fetch = FetchType.LAZY)
+    private java.util.List<ConexionEntity> conexiones;
 
     public InstalacionEntity() {
+        this.conexiones = new java.util.ArrayList<>();
     }
 
     public InstalacionEntity(String nombre,Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw) {
@@ -119,7 +123,9 @@ public class InstalacionEntity {
     public void setPrecioKw(Integer preciokw) {
         this.preciokw = preciokw;
     }
-
-   
+  
+    public int getConexiones() {
+        return conexiones.size();
+    }
 
 }

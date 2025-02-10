@@ -2,6 +2,7 @@ package net.ausiasmarch.cel.service;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
+import net.ausiasmarch.cel.entity.InstalacionEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.exception.ResourceNotFoundException;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
@@ -118,11 +119,11 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
         return 1L;
     }
 
-        public InmuebleEntity create(InmuebleEntity oInmuebleEntity) {
+     public InmuebleEntity create(InmuebleEntity oInmuebleEntity) {
            
                 return oInmuebleRepository.save(oInmuebleEntity);
         
-        }
+     }
 
  public InmuebleEntity update(InmuebleEntity oInmuebleEntity) {
         InmuebleEntity oInmuebleEntityFromDatabase = oInmuebleRepository.findById(oInmuebleEntity.getId()).get();
@@ -188,6 +189,28 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
         return oInmuebleRepository.findById((long) oRandomService.getRandomInt(1, (int) (long) this.count())).get();
     }
 
+    public Page<InmuebleEntity> getPageXInstalacion(Pageable oPageable, Optional<String> filter,
+    Optional<Long> instalacion) {
+if (filter.isPresent()) {
+    if (instalacion.isPresent()) {
+        return oInmuebleRepository
+                .findByTituloContainingOrDescripcionContainingXInstalacion(instalacion.get(), filter.get(),
+                        oPageable);
+    } else {
+        return oInmuebleRepository
+                .findByTituloContainingOrDescripcionContaining(
+                        filter.get(), filter.get(),
+                        oPageable);
+    }
+} else {
+    if (instalacion.isPresent()) {
+        return oInmuebleRepository.findAllXInstalacion(instalacion.get(), oPageable);
+    } else {
+        return oInmuebleRepository.findAll(oPageable);            
+    }
+
+}
+}
 
 
 

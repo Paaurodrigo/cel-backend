@@ -1,5 +1,6 @@
 package net.ausiasmarch.cel.api;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.cel.entity.InmuebleEntity;
+import net.ausiasmarch.cel.repository.InmuebleRepository;
 import net.ausiasmarch.cel.service.InmuebleService;
 
 
@@ -29,6 +31,9 @@ public class Inmueble {
 
   @Autowired
   InmuebleService oInmuebleService;
+
+  @Autowired
+  InmuebleRepository oInmuebleRepository;
 
 
      @GetMapping("")
@@ -69,7 +74,22 @@ public class Inmueble {
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id) {
         return new ResponseEntity<Long>(oInmuebleService.delete(id), HttpStatus.OK);
+
     }
+
+    @GetMapping("/sin-socio")
+public ResponseEntity<List<InmuebleEntity>> getInmueblesSinSocio() {
+    return ResponseEntity.ok(oInmuebleRepository.findInmueblesSinSocio());
+}
+
+@GetMapping("/xinstalacion/{instalacion}")
+public ResponseEntity<Page<InmuebleEntity>> getPageXInstalacion(
+        Pageable oPageable,
+        @RequestParam Optional<String> filter,
+        @PathVariable Optional<Long> instalacion) {
+    return new ResponseEntity<Page<InmuebleEntity>>(
+            oInmuebleService.getPageXInstalacion(oPageable, filter, instalacion), HttpStatus.OK);
+}
 
     
 
