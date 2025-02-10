@@ -120,7 +120,6 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
     }
 
      public InmuebleEntity create(InmuebleEntity oInmuebleEntity) {
-           
                 return oInmuebleRepository.save(oInmuebleEntity);
         
      }
@@ -189,28 +188,35 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
         return oInmuebleRepository.findById((long) oRandomService.getRandomInt(1, (int) (long) this.count())).get();
     }
 
+
     public Page<InmuebleEntity> getPageXInstalacion(Pageable oPageable, Optional<String> filter,
     Optional<Long> instalacion) {
 if (filter.isPresent()) {
+
     if (instalacion.isPresent()) {
         return oInmuebleRepository
-                .findByTituloContainingOrDescripcionContainingXInstalacion(instalacion.get(), filter.get(),
+                .findByCupsContainingXInmueble(instalacion.get(), filter.get(),
                         oPageable);
     } else {
         return oInmuebleRepository
-                .findByTituloContainingOrDescripcionContaining(
-                        filter.get(), filter.get(),
+                .findByCupsContaining(
+                        filter.get(),
                         oPageable);
     }
 } else {
+
     if (instalacion.isPresent()) {
         return oInmuebleRepository.findAllXInstalacion(instalacion.get(), oPageable);
     } else {
-        return oInmuebleRepository.findAll(oPageable);            
+        return oInmuebleRepository.findAll(oPageable);
     }
+}
+}
 
-}
-}
+    
+
+
+
 
 
 

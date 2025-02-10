@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.cel.entity.InmuebleEntity;
+import net.ausiasmarch.cel.entity.InstalacionEntity;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
 import net.ausiasmarch.cel.service.InmuebleService;
 
@@ -82,14 +83,16 @@ public ResponseEntity<List<InmuebleEntity>> getInmueblesSinSocio() {
     return ResponseEntity.ok(oInmuebleRepository.findInmueblesSinSocio());
 }
 
-@GetMapping("/xinstalacion/{instalacion}")
-public ResponseEntity<Page<InmuebleEntity>> getPageXInstalacion(
-        Pageable oPageable,
-        @RequestParam Optional<String> filter,
-        @PathVariable Optional<Long> instalacion) {
-    return new ResponseEntity<Page<InmuebleEntity>>(
-            oInmuebleService.getPageXInstalacion(oPageable, filter, instalacion), HttpStatus.OK);
-}
+   @GetMapping("/xinstalacion/{id_instalacion}")
+    public ResponseEntity<Page<InmuebleEntity>> getPageXtTpoapunte(
+            Pageable oPageable,
+            @RequestParam Optional<String> filter,
+            @PathVariable Optional<Long> id_instalacion) {
+        {
+            return new ResponseEntity<Page<InmuebleEntity>>(
+                    oInmuebleService.getPageXInstalacion(oPageable, filter, id_instalacion), HttpStatus.OK);
+        }
+    }
 
     
 

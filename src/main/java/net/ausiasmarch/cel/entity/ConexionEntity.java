@@ -88,7 +88,7 @@ public class ConexionEntity {
         return inmueble;
     }
 
-    public void setInmmueble(InmuebleEntity inmueble) {
+    public void setInmueble(InmuebleEntity inmueble) {
         this.inmueble = inmueble;
     }
 

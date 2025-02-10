@@ -13,11 +13,10 @@ public interface InstalacionRepository extends JpaRepository<InstalacionEntity, 
      Page<InstalacionEntity> findByNombreContaining(
             String filter2, Pageable oPageable);
 
-     @Query(value = "SELECT i.* FROM instalacion i, conexion c WHERE i.id = c.id_instalacion and c.id_inmueble=:id_inmueble", nativeQuery = true)
-    Page<InstalacionEntity> findAllXInmueble(Long id_inmueble, Pageable oPageable);
-
-    @Query(value = "SELECT i.* FROM instalacion i, conexion c WHERE c.id = c.id_instalacion and c.id_inmueble=:id_inmueble and (i.nombre LIKE %:strFilter%)", nativeQuery = true)
-    Page<InstalacionEntity> findByNombreContainingXInmueble(Long id_inmueble,String strFilter, Pageable oPageable);
-
+            @Query(value = "SELECT i.* FROM instalacion i, conexion c WHERE i.id = c.instalacion and c.inmueble=:inmueble", nativeQuery = true)
+            Page<InstalacionEntity> findAllXInmueble(Long inmueble, Pageable oPageable);
+            
+            @Query(value = "SELECT i.* FROM istalacion i, conexion c WHERE i.id = c.instalacion and c.inmueble=:inmueble and (i.nombre LIKE %:strFilter%)", nativeQuery = true)
+            Page<InstalacionEntity> findByNombreContainingXInmueble(Long inmueble,String strFilter, Pageable oPageable);
 
 }

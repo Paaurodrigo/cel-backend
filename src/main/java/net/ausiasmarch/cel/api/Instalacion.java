@@ -22,30 +22,32 @@ import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.InstalacionEntity;
 import net.ausiasmarch.cel.service.InstalacionService;
 
-
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RequestMapping("/instalacion")
 public class Instalacion {
-    
-  @Autowired
-  InstalacionService oInstalacionService;
 
+    @Autowired
+    InstalacionService oInstalacionService;
 
-     @GetMapping("")
+    @GetMapping("")
     public ResponseEntity<Page<InstalacionEntity>> getPage(
             Pageable oPageable,
-            @RequestParam  Optional<String> filter) {
-        return new ResponseEntity<Page<InstalacionEntity>>(oInstalacionService.getPage(oPageable, filter), HttpStatus.OK);
+            @RequestParam Optional<String> filter) {
+        return new ResponseEntity<Page<InstalacionEntity>>(oInstalacionService.getPage(oPageable, filter),
+                HttpStatus.OK);
     }
+
     @PutMapping("/new")
     public ResponseEntity<InstalacionEntity> create(@RequestBody InstalacionEntity oInstalacionEntity) {
         return new ResponseEntity<InstalacionEntity>(oInstalacionService.create(oInstalacionEntity), HttpStatus.OK);
     }
+
     @PutMapping("/random/{cantidad}")
     public ResponseEntity<Long> create(@PathVariable Long cantidad) {
         return new ResponseEntity<Long>(oInstalacionService.randomCreate(cantidad), HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<InstalacionEntity> getInstalacion(@PathVariable Long id) {
         return new ResponseEntity<InstalacionEntity>(oInstalacionService.get(id), HttpStatus.OK);
@@ -61,6 +63,15 @@ public class Instalacion {
         return new ResponseEntity<Long>(oInstalacionService.delete(id), HttpStatus.OK);
     }
 
-    
+    @GetMapping("/xinmueble/{id_inmueble}")
+    public ResponseEntity<Page<InstalacionEntity>> getPageXtTpoapunte(
+            Pageable oPageable,
+            @RequestParam Optional<String> filter,
+            @PathVariable Optional<Long> id_inmueble) {
+        {
+            return new ResponseEntity<Page<InstalacionEntity>>(
+                    oInstalacionService.getPageXInmueble(oPageable, filter, id_inmueble), HttpStatus.OK);
+        }
+    }
 
 }
