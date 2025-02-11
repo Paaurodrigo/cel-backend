@@ -40,6 +40,8 @@ public class AuthService {
         claims.put("email", email);
         claims.put("nombre", oSocioRepository.findByEmail(email).get().getNombre());
         claims.put("apellido1", oSocioRepository.findByEmail(email).get().getApellido1());
+        claims.put("role", oSocioRepository.findByEmail(email).get().getTiposocio().getDescripcion());
+        claims.put("id", oSocioRepository.findByEmail(email).get().getId().toString());
         return claims;
     };
 
