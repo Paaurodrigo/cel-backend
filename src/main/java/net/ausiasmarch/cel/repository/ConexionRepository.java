@@ -22,6 +22,10 @@ public interface ConexionRepository extends JpaRepository<ConexionEntity, Long> 
     Page<ConexionEntity> findByIdContaining(
         String filter1, Pageable oPageable);
 
+  // Método personalizado corregido
+  Page<ConexionEntity> findByInstalacionNombreContainingOrInmuebleCupsContaining(
+    String instalacionNombre, String inmuebleCups, Pageable pageable);
 
+       
 
 }

@@ -24,12 +24,10 @@ public class ConexionEntity {
     private Long id;
 
     @NotNull
-    @Size(min = 3, max = 255)
     private double potencia;
     @NotNull    
     private String fecha;
     @NotNull
-    @Max(value = 128)
     private double porcentaje;
 
  @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)

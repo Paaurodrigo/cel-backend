@@ -163,15 +163,17 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
     }
 
     public SocioEntity create(SocioEntity oSocioEntity) { 
+            
             oSocioEntity.setTiposocio(oTipoSocioRepository.findById(2L)
             .orElseThrow(() -> new RuntimeException("TipoSocio no encontrado")));
             return oSocioRepository.save(oSocioEntity);
-    }
+        }
+    
 
     public SocioEntity createByAdmin(SocioEntity oSocioEntity) {
         if (oAuthService.isAdmin()) {
             return oSocioRepository.save(oSocioEntity);
-        } else {
+        }else {
             throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
         }
     }

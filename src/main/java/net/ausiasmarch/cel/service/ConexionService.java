@@ -24,6 +24,15 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
     ConexionRepository oConexionRepository;
 
     @Autowired
+    private InmuebleRepository InmuebleRepository;
+
+    @Autowired
+    private InstalacionRepository InstalacionRepository;
+
+    @Autowired
+    AuthService oAuthService;
+
+    @Autowired
     InstalacionService oInstalacionService;
 
     @Autowired
@@ -42,46 +51,64 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
     
 
 
-    // Crear
-    public ConexionEntity create(ConexionEntity oConexionEntity) {
-        return oConexionRepository.save(oConexionEntity);
+    @Override
+    public ConexionEntity create(ConexionEntity ConexionEntity) {
+    if (oAuthService.isAdmin()) {
+        ConexionEntity.setInmueble(InmuebleRepository.findById(ConexionEntity.getInmueble().getId()).get());
+        ConexionEntity.setInstalacion(InstalacionRepository.findById(ConexionEntity.getInstalacion().getId()).get());
+        return oConexionRepository.save(ConexionEntity);
+    } else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
+
     // Delete
-    public Long delete(Long id) {
-        oConexionRepository.deleteById(id);
-        return 1L;
-    }
+   
 
     public ConexionEntity findById(Long id) {
         return oConexionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Istalacion no encontrada con id: " + id));
     }
 
+    @Override
     public ConexionEntity get(Long id) {
         return oConexionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Carta no encontrada con id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Conexion con ID " + id + " no encontrado."));
     }
 
-    public Long count() {
-        return oConexionRepository.count();
-    }
+ 
 
+
+    @Override
     public Page<ConexionEntity> getPage(Pageable oPageable, Optional<String> filter) {
-
         if (filter.isPresent()) {
-            return oConexionRepository
-                    .findByIdContaining(
-                            filter.get(), oPageable);
+            return oConexionRepository.findByInstalacionNombreContainingOrInmuebleCupsContaining(
+                filter.get(), filter.get(), oPageable);
         } else {
             return oConexionRepository.findAll(oPageable);
         }
-
     }
+
+ 
+  
+  
 
     public Long deleteAll() {
         oConexionRepository.deleteAll();
         return this.count();
+    }
+
+    @Override
+    public Long count() {
+        return oConexionRepository.count();
+    }
+
+    @Override
+    public Long delete(Long id) {
+        ConexionEntity oConexionEntity = get(id); // Llama a get para validar existencia
+        oConexionRepository.delete(oConexionEntity);
+        return id;
     }
 
     public ConexionEntity update(ConexionEntity oConexionEntity) {
