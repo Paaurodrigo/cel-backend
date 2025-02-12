@@ -67,7 +67,6 @@ public class InmuebleEntity {
     @Size(min = 3, max = 255)
     private String intencion;
 
-    @NotNull
     @Size(min = 3, max = 255)
     private String recomendacion;
 

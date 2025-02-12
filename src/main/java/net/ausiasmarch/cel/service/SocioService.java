@@ -158,8 +158,12 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
     }
 
     public Long delete(Long id) {
+        if (oAuthService.isAdmin()) {
         oSocioRepository.deleteById(id);
         return 1L;
+    }else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
     public SocioEntity create(SocioEntity oSocioEntity) { 
@@ -212,8 +216,12 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
     }
 
     public Long deleteAll() {
+        if (oAuthService.isAdmin()) {
         oSocioRepository.deleteAll();
         return this.count();
+    }else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
     public SocioEntity randomSelection() {
