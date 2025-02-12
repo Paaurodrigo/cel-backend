@@ -95,8 +95,12 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
   
 
     public Long deleteAll() {
+        if (oAuthService.isAdmin()) {
         oConexionRepository.deleteAll();
         return this.count();
+    } else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
     @Override
@@ -106,12 +110,17 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
 
     @Override
     public Long delete(Long id) {
+        if (oAuthService.isAdmin()) {
         ConexionEntity oConexionEntity = get(id); // Llama a get para validar existencia
         oConexionRepository.delete(oConexionEntity);
         return id;
+    } else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
     public ConexionEntity update(ConexionEntity oConexionEntity) {
+        if (oAuthService.isAdmin()) {
         ConexionEntity oConexionEntityFromDatabase = oConexionRepository
                 .findById(oConexionEntity.getId()).get();
         if (oConexionEntity.getFecha() != null) {
@@ -130,9 +139,13 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
             oConexionEntityFromDatabase.setInmueble(oInmuebleService.get(oConexionEntity.getInmueble().getId()));
         }
         return oConexionRepository.save(oConexionEntityFromDatabase);
+    } else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
     public Long deleteByInmuebleAndInstalacion(Long inmuebleId, Long instalacionId) {
+        if (oAuthService.isAdmin()) {
         ConexionEntity conexionRealizada = oConexionRepository.findByInmuebleIdAndInstalacionId(inmuebleId,
                 instalacionId);
         if (conexionRealizada != null) {
@@ -141,6 +154,9 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
         } else {
             throw new RuntimeException("No se encontró la la instalacion en el inmueble seleccionado.");
         }
+    } else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
     @Override
@@ -151,6 +167,7 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
     }
 
     public Long randomCreate(Long cantidad) {
+        if (oAuthService.isAdmin()) {
         for (int i = 0; i < cantidad; i++) {
             ConexionEntity oConexionEntity = new ConexionEntity();
             oConexionEntity.setPotencia(oRandomService.getRandomInt(2, 234));
@@ -161,6 +178,9 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
             oConexionRepository.save(oConexionEntity);
         }
         return oConexionRepository.count();
+    } else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
    

@@ -5,6 +5,7 @@ import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.InstalacionEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.exception.ResourceNotFoundException;
+import net.ausiasmarch.cel.exception.UnauthorizedAccessException;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
 import net.ausiasmarch.cel.repository.SocioRepository;
 
@@ -22,6 +23,9 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
 
     @Autowired
     RandomService oRandomService;
+
+    @Autowired
+    AuthService oAuthService;
 
     @Autowired
     SocioRepository oSocioRepository;
@@ -51,7 +55,7 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
   "Paseo de la Esperanza", "Carretera de la Sierra", "Camino de las Estrellas", "Callejón del Misterio"};
 
     public Long randomCreate(Long cantidad) {
-
+        if (oAuthService.isAdmin()) {
         for (int i = 0; i < cantidad; i++) {
             InmuebleEntity oInmuebleEntity = new InmuebleEntity();
             oInmuebleEntity.setCups(String.valueOf(oRandomService.getRandomInt(999, 9999)));
@@ -71,6 +75,9 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
             oInmuebleRepository.save(oInmuebleEntity);
         }
         return oInmuebleRepository.count();
+         }else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
   
 
@@ -115,11 +122,16 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
     }
 
     public Long delete(Long id) {
+        if (oAuthService.isAdmin()) {
         oInmuebleRepository.deleteById(id);
         return 1L;
+    }else {
+        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    }
     }
 
      public InmuebleEntity create(InmuebleEntity oInmuebleEntity) {
+        
                 return oInmuebleRepository.save(oInmuebleEntity);
         
      }
