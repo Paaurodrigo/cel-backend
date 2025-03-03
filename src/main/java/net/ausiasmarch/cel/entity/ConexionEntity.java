@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -38,6 +40,22 @@ public class ConexionEntity {
     @JoinColumn(name = "instalacion")
     private InstalacionEntity instalacion;
 
+    @PrePersist
+    @PreUpdate
+    private void actualizarPotenciaYPorcentaje() {
+        if (this.instalacion != null) {
+            // Restar la potencia de la conexión de la potencia disponible de la instalación
+            double nuevaPotenciaDisponible = this.instalacion.getPotenciaDisponible() - this.potencia;
+            if (nuevaPotenciaDisponible < 0) {
+                throw new IllegalArgumentException("No hay suficiente potencia disponible en la instalación.");
+            }
+            this.instalacion.setPotenciaDisponible(nuevaPotenciaDisponible);
+
+            // Calcular el porcentaje de la conexión respecto a la potencia total de la instalación
+            double porcentaje = (this.potencia / this.instalacion.getPotenciaTotal()) * 100;
+            this.setPorcentaje(porcentaje);
+        }
+    }
 
     public ConexionEntity() {
     }

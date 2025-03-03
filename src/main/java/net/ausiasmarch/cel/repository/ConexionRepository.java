@@ -1,5 +1,7 @@
 package net.ausiasmarch.cel.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +16,6 @@ public interface ConexionRepository extends JpaRepository<ConexionEntity, Long> 
 
     @Query(value = "SELECT * FROM Conexion WHERE inmueble = :inmuebleId", nativeQuery = true)
     Page<ConexionEntity> findByInmuebleIdSQL(@Param("inmuebleId") Long inmuebleId, Pageable pageable);
-
     ConexionEntity findByInmuebleIdAndInstalacionId(Long inmuebleId, Long instalacionId);
 
 
@@ -26,6 +27,9 @@ public interface ConexionRepository extends JpaRepository<ConexionEntity, Long> 
   Page<ConexionEntity> findByInstalacionNombreContainingOrInmuebleCupsContaining(
     String instalacionNombre, String inmuebleCups, Pageable pageable);
 
-       
+    
+        @Query("SELECT c FROM ConexionEntity c WHERE c.instalacion.id = :id_instalacion")
+        Page<ConexionEntity> findByInstalacion(@Param("id_instalacion") Long id_instalacion, Pageable pageable);
+        
 
 }

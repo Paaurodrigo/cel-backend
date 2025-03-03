@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import net.ausiasmarch.cel.api.Inmueble;
 import net.ausiasmarch.cel.entity.ConexionEntity;
+import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.InstalacionEntity;
 import net.ausiasmarch.cel.exception.ResourceNotFoundException;
 import net.ausiasmarch.cel.exception.UnauthorizedAccessException;
@@ -24,10 +25,10 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
     ConexionRepository oConexionRepository;
 
     @Autowired
-    private InmuebleRepository InmuebleRepository;
+    private InmuebleRepository oInmuebleRepository;
 
     @Autowired
-    private InstalacionRepository InstalacionRepository;
+    private InstalacionRepository oInstalacionRepository;
 
     @Autowired
     AuthService oAuthService;
@@ -49,18 +50,72 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
         "31-10-2022"
     };
     
-
-
     @Override
-    public ConexionEntity create(ConexionEntity ConexionEntity) {
+public ConexionEntity create(ConexionEntity conexionEntity) {
     if (oAuthService.isAdmin()) {
-        ConexionEntity.setInmueble(InmuebleRepository.findById(ConexionEntity.getInmueble().getId()).get());
-        ConexionEntity.setInstalacion(InstalacionRepository.findById(ConexionEntity.getInstalacion().getId()).get());
-        return oConexionRepository.save(ConexionEntity);
+        // Obtener el inmueble
+        InmuebleEntity inmueble = oInmuebleRepository.findById(conexionEntity.getInmueble().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Inmueble no encontrado"));
+        conexionEntity.setInmueble(inmueble);
+
+        // Obtener la instalación
+        InstalacionEntity instalacion = oInstalacionRepository.findById(conexionEntity.getInstalacion().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Instalación no encontrada"));
+        System.out.println("Instalación encontrada: " + instalacion.getId());
+
+        // Comprobamos si potenciaDisponible es null
+        Double potenciaDisponible = instalacion.getPotenciaDisponible();
+        System.out.println("Potencia Disponible antes de la operación: " + potenciaDisponible);
+
+        if (potenciaDisponible == null) {
+            potenciaDisponible = instalacion.getPotenciaTotal(); // Asigna la potencia total si es null
+            instalacion.setPotenciaDisponible(potenciaDisponible);
+            System.out.println("Potencia Disponible era null, asignado potencia total: " + potenciaDisponible);
+            instalacion = oInstalacionRepository.save(instalacion); // Guardamos solo si cambia
+        }
+
+        // Verificamos si hay suficiente potencia disponible
+        System.out.println("Potencia requerida para la conexión: " + conexionEntity.getPotencia());
+        if (potenciaDisponible < conexionEntity.getPotencia()) {
+            throw new IllegalArgumentException("No hay suficiente potencia disponible en la instalación");
+        }
+
+        // Verificar que la potencia total no sea 0
+        double potenciaTotal = instalacion.getPotenciaTotal();
+        System.out.println("Potencia Total de la instalación: " + potenciaTotal);
+        if (potenciaTotal <= 0) {
+            throw new IllegalArgumentException("La potencia total de la instalación no puede ser 0 o negativa.");
+        }
+
+        // Restamos la potencia de la conexión de la potencia disponible
+        double nuevaPotenciaDisponible = potenciaDisponible - conexionEntity.getPotencia();
+        instalacion.setPotenciaDisponible(nuevaPotenciaDisponible);
+        System.out.println("Nueva potencia disponible después de la conexión: " + nuevaPotenciaDisponible);
+
+        // Calculamos el porcentaje de la conexión
+        double porcentaje = (conexionEntity.getPotencia() / potenciaTotal) * 100;
+        conexionEntity.setPorcentaje(porcentaje);
+        System.out.println("Porcentaje de la conexión: " + porcentaje);
+
+        // Guardamos la conexión antes de modificar la instalación
+        ConexionEntity nuevaConexion = oConexionRepository.save(conexionEntity);
+        System.out.println("Conexión guardada con ID: " + nuevaConexion.getId());
+
+        // Guardamos la instalación con la potencia actualizada
+        instalacion = oInstalacionRepository.save(instalacion); // Vuelve a guardar después de modificar la potencia
+        System.out.println("Instalación guardada con la nueva potencia disponible: " + instalacion.getPotenciaDisponible());
+
+        // Verificar que la potencia fue actualizada correctamente
+        System.out.println("Potencia disponible después de guardada: " + instalacion.getPotenciaDisponible());
+
+        return nuevaConexion;
     } else {
-        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+        throw new UnauthorizedAccessException("No tienes permisos para crear una conexión");
     }
-    }
+}
+
+
+    
 
 
     // Delete
@@ -90,6 +145,10 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
         }
     }
 
+    public Page<ConexionEntity> getPageByInstalacion(Long id_instalacion, Pageable pageable) {
+        return oConexionRepository.findByInstalacion(id_instalacion, pageable);
+    }
+    
  
   
   
@@ -108,16 +167,38 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
         return oConexionRepository.count();
     }
 
+    
+
     @Override
     public Long delete(Long id) {
         if (oAuthService.isAdmin()) {
-        ConexionEntity oConexionEntity = get(id); // Llama a get para validar existencia
-        oConexionRepository.delete(oConexionEntity);
-        return id;
-    } else {
-        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+            // Obtener la conexión a eliminar
+            ConexionEntity oConexionEntity = get(id); // Llama a get para validar existencia
+            
+            // Obtener la instalación asociada a la conexión
+            InstalacionEntity instalacion = oConexionEntity.getInstalacion();
+            
+            if (instalacion != null) {
+                // Restaurar la potencia disponible de la instalación
+                double nuevaPotenciaDisponible = instalacion.getPotenciaDisponible() + oConexionEntity.getPotencia();
+                
+                // Actualizar la potencia disponible de la instalación
+                instalacion.setPotenciaDisponible(nuevaPotenciaDisponible);
+                
+                // Guardar los cambios en la instalación
+                oInstalacionRepository.save(instalacion);
+            }
+            
+            // Eliminar la conexión
+            oConexionRepository.delete(oConexionEntity);
+            
+            // Retornar el id de la conexión eliminada
+            return id;
+        } else {
+            throw new UnauthorizedAccessException("No tienes permisos para eliminar esta conexión");
+        }
     }
-    }
+    
 
     public ConexionEntity update(ConexionEntity oConexionEntity) {
         if (oAuthService.isAdmin()) {

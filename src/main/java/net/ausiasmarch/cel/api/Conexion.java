@@ -52,6 +52,14 @@ public class Conexion {
         return new ResponseEntity<Long>(oConexionService.delete(id), HttpStatus.OK);
     }
 
+    @GetMapping("/by-instalacion")
+    public Page<ConexionEntity> getConexionesByInstalacion(
+            @RequestParam Long id_instalacion,
+            Pageable pageable
+    ) {
+        return oConexionService.getPageByInstalacion(id_instalacion, pageable);
+    }
+
 
 
 

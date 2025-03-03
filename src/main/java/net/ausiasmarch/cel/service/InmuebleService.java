@@ -1,11 +1,14 @@
 package net.ausiasmarch.cel.service;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import net.ausiasmarch.cel.entity.ConexionEntity;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.InstalacionEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.exception.ResourceNotFoundException;
 import net.ausiasmarch.cel.exception.UnauthorizedAccessException;
+import net.ausiasmarch.cel.repository.ConexionRepository;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
 import net.ausiasmarch.cel.repository.SocioRepository;
 
@@ -20,6 +23,9 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
     
  @Autowired
     InmuebleRepository oInmuebleRepository;
+
+    @Autowired
+    ConexionRepository oConexionRepository;
 
     @Autowired
     RandomService oRandomService;
@@ -201,29 +207,26 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
     }
 
 
-    public Page<InmuebleEntity> getPageXInstalacion(Pageable oPageable, Optional<String> filter,
+    public Page<ConexionEntity> getPageXInstalacion(Pageable oPageable, Optional<String> filter,
     Optional<Long> instalacion) {
-if (filter.isPresent()) {
 
-    if (instalacion.isPresent()) {
-        return oInmuebleRepository
-                .findByCupsContainingXInmueble(instalacion.get(), filter.get(),
-                        oPageable);
+    if (filter.isPresent()) {
+        if (instalacion.isPresent()) {
+            return oConexionRepository.findByInstalacion(instalacion.get(), oPageable);
+        } else {
+            // Si el filtro es por cups, probablemente no tenga sentido en conexiones
+            // Aquí podrías filtrar de otra manera si lo necesitas.
+            return oConexionRepository.findAll(oPageable);
+        }
     } else {
-        return oInmuebleRepository
-                .findByCupsContaining(
-                        filter.get(),
-                        oPageable);
-    }
-} else {
-
-    if (instalacion.isPresent()) {
-        return oInmuebleRepository.findAllXInstalacion(instalacion.get(), oPageable);
-    } else {
-        return oInmuebleRepository.findAll(oPageable);
+        if (instalacion.isPresent()) {
+            return oConexionRepository.findByInstalacion(instalacion.get(), oPageable);
+        } else {
+            return oConexionRepository.findAll(oPageable);
+        }
     }
 }
-}
+
 
     
 
