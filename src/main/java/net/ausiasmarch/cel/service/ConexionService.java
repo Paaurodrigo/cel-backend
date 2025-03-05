@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import net.ausiasmarch.cel.api.Inmueble;
 import net.ausiasmarch.cel.entity.ConexionEntity;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
@@ -51,73 +52,91 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
     };
     
     @Override
-public ConexionEntity create(ConexionEntity conexionEntity) {
-    if (oAuthService.isAdmin()) {
-        // Obtener el inmueble
-        InmuebleEntity inmueble = oInmuebleRepository.findById(conexionEntity.getInmueble().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Inmueble no encontrado"));
+    @Transactional
+    public ConexionEntity create(ConexionEntity conexionEntity) {
+        // Verificar permisos de administrador
+        validateAdminPermissions();
+    
+        // Validar y obtener el inmueble
+        InmuebleEntity inmueble = validateAndGetInmueble(conexionEntity.getInmueble().getId());
+    
+        // Validar y obtener la instalación
+        InstalacionEntity instalacion = validateAndGetInstalacion(conexionEntity.getInstalacion().getId());
+    
+        // Validar y actualizar la potencia disponible
+        validateAndUpdatePotenciaDisponible(instalacion, conexionEntity.getPotencia());
+    
+        // Calcular el porcentaje de la conexión
+        double porcentaje = calculatePorcentaje(instalacion.getPotenciaTotal(), conexionEntity.getPotencia());
+        conexionEntity.setPorcentaje(porcentaje);
+        // Asignar el inmueble y la instalación a la conexión
         conexionEntity.setInmueble(inmueble);
+        conexionEntity.setInstalacion(instalacion);
 
-        // Obtener la instalación
-        InstalacionEntity instalacion = oInstalacionRepository.findById(conexionEntity.getInstalacion().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Instalación no encontrada"));
-        System.out.println("Instalación encontrada: " + instalacion.getId());
-
-        // Comprobamos si potenciaDisponible es null
-        Double potenciaDisponible = instalacion.getPotenciaDisponible();
-        System.out.println("Potencia Disponible antes de la operación: " + potenciaDisponible);
-
-        if (potenciaDisponible == null) {
-            potenciaDisponible = instalacion.getPotenciaTotal(); // Asigna la potencia total si es null
-            instalacion.setPotenciaDisponible(potenciaDisponible);
-            System.out.println("Potencia Disponible era null, asignado potencia total: " + potenciaDisponible);
-            instalacion = oInstalacionRepository.save(instalacion); // Guardamos solo si cambia
+        // Guardar la conexión
+        ConexionEntity nuevaConexion = oConexionRepository.save(conexionEntity);
+      
+ 
+        // Guardar la instalación con la potencia actualizada (solo una vez)
+        oInstalacionRepository.save(instalacion);
+        return nuevaConexion;
+    }
+    
+    // Método para validar permisos de administrador
+    private void validateAdminPermissions() {
+        if (!oAuthService.isAdmin()) {
+            throw new UnauthorizedAccessException("No tienes permisos para crear una conexión");
         }
-
-        // Verificamos si hay suficiente potencia disponible
-        System.out.println("Potencia requerida para la conexión: " + conexionEntity.getPotencia());
-        if (potenciaDisponible < conexionEntity.getPotencia()) {
+    }
+    
+    // Método para validar y obtener el inmueble
+    private InmuebleEntity validateAndGetInmueble(Long inmuebleId) {
+        return oInmuebleRepository.findById(inmuebleId)
+                .orElseThrow(() -> new IllegalArgumentException("Inmueble no encontrado con ID: " + inmuebleId));
+    }
+    
+    // Método para validar y obtener la instalación
+    private InstalacionEntity validateAndGetInstalacion(Long instalacionId) {
+        return oInstalacionRepository.findById(instalacionId)
+                .orElseThrow(() -> new IllegalArgumentException("Instalación no encontrada con ID: " + instalacionId));
+    }
+    
+    // Método para validar y actualizar la potencia disponible
+    private void validateAndUpdatePotenciaDisponible(InstalacionEntity instalacion, Double potenciaRequerida) {
+        // Verificar que la potencia requerida no sea nula o negativa
+        if (potenciaRequerida == null || potenciaRequerida <= 0) {
+            throw new IllegalArgumentException("La potencia requerida debe ser un valor positivo");
+        }
+    
+        // Obtener la potencia disponible (o asignar la potencia total si es null)
+        Double potenciaDisponible = instalacion.getPotenciaDisponible();
+        if (potenciaDisponible == null) {
+            potenciaDisponible = instalacion.getPotenciaTotal();
+            instalacion.setPotenciaDisponible(potenciaDisponible);
+        }
+    
+        // Verificar que la potencia total no sea nula o negativa
+        Double potenciaTotal = instalacion.getPotenciaTotal();
+        if (potenciaTotal == null || potenciaTotal <= 0) {
+            throw new IllegalArgumentException("La potencia total de la instalación no puede ser nula o negativa");
+        }
+    
+        // Verificar que haya suficiente potencia disponible
+        if (potenciaDisponible < potenciaRequerida) {
             throw new IllegalArgumentException("No hay suficiente potencia disponible en la instalación");
         }
-
-        // Verificar que la potencia total no sea 0
-        double potenciaTotal = instalacion.getPotenciaTotal();
-        System.out.println("Potencia Total de la instalación: " + potenciaTotal);
-        if (potenciaTotal <= 0) {
-            throw new IllegalArgumentException("La potencia total de la instalación no puede ser 0 o negativa.");
-        }
-
-        // Restamos la potencia de la conexión de la potencia disponible
-        double nuevaPotenciaDisponible = potenciaDisponible - conexionEntity.getPotencia();
-        instalacion.setPotenciaDisponible(nuevaPotenciaDisponible);
-        System.out.println("Nueva potencia disponible después de la conexión: " + nuevaPotenciaDisponible);
-
-        // Calculamos el porcentaje de la conexión
-        double porcentaje = (conexionEntity.getPotencia() / potenciaTotal) * 100;
-        conexionEntity.setPorcentaje(porcentaje);
-        System.out.println("Porcentaje de la conexión: " + porcentaje);
-
-        // Guardamos la conexión antes de modificar la instalación
-        ConexionEntity nuevaConexion = oConexionRepository.save(conexionEntity);
-        System.out.println("Conexión guardada con ID: " + nuevaConexion.getId());
-
-        // Guardamos la instalación con la potencia actualizada
-        instalacion = oInstalacionRepository.save(instalacion); // Vuelve a guardar después de modificar la potencia
-        System.out.println("Instalación guardada con la nueva potencia disponible: " + instalacion.getPotenciaDisponible());
-
-        // Verificar que la potencia fue actualizada correctamente
-        System.out.println("Potencia disponible después de guardada: " + instalacion.getPotenciaDisponible());
-
-        return nuevaConexion;
-    } else {
-        throw new UnauthorizedAccessException("No tienes permisos para crear una conexión");
-    }
-}
-
-
     
-
-
+        // Actualizar la potencia disponible (solo una vez)
+        instalacion.setPotenciaDisponible(potenciaDisponible - potenciaRequerida);
+    }
+    
+    // Método para calcular el porcentaje de la conexión
+    private double calculatePorcentaje(Double potenciaTotal, Double potenciaRequerida) {
+        if (potenciaTotal == null || potenciaTotal <= 0) {
+            throw new IllegalArgumentException("La potencia total de la instalación no puede ser nula o negativa");
+        }
+        return (potenciaRequerida / potenciaTotal);
+    }
     // Delete
    
 
