@@ -1,5 +1,6 @@
 package net.ausiasmarch.cel.api;
 
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,6 +62,23 @@ public class Conexion {
         return oConexionService.getPageByInstalacion(id_instalacion, pageable);
     }
 
+    @PostMapping("/{id}/firmar")
+    public ResponseEntity<String> firmarConexion(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+        String firmaBase64 = requestBody.get("firma");
+        oConexionService.guardarFirma(id, firmaBase64);
+        return ResponseEntity.ok("Firma guardada correctamente");
+    }
+
+    @PostMapping("/enviar-correo")
+    public ResponseEntity<String> reenviarmail(@RequestBody ConexionEntity conexionEntity) {
+        oConexionService.enviarmail(conexionEntity);
+        return ResponseEntity.ok("Correo enviado con éxito");
+    }
+
+
+
+
+    
 
 
 

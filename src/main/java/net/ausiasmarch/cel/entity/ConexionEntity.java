@@ -1,10 +1,12 @@
 package net.ausiasmarch.cel.entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -31,6 +33,9 @@ public class ConexionEntity {
     private String fecha;
     @NotNull
     private double porcentaje;
+  @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String firma; // Guarda la firma en Base64
 
  @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "inmueble")
@@ -100,6 +105,10 @@ public class ConexionEntity {
     public void setInstalacion(InstalacionEntity instalacion) {
         this.instalacion = instalacion;
     }
+
+  
+    public String getFirma() { return firma; }
+    public void setFirma(String firma) { this.firma = firma; }
 
 
 }

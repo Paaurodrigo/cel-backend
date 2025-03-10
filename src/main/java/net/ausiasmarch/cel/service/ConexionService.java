@@ -23,6 +23,9 @@ import net.ausiasmarch.cel.repository.SocioRepository;
 public class ConexionService implements ServiceInterface<ConexionEntity> {
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     ConexionRepository oConexionRepository;
 
     @Autowired
@@ -69,18 +72,74 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
         // Calcular el porcentaje de la conexión
         double porcentaje = calculatePorcentaje(instalacion.getPotenciaTotal(), conexionEntity.getPotencia());
         conexionEntity.setPorcentaje(porcentaje);
+        
         // Asignar el inmueble y la instalación a la conexión
         conexionEntity.setInmueble(inmueble);
         conexionEntity.setInstalacion(instalacion);
-
+    
         // Guardar la conexión
         ConexionEntity nuevaConexion = oConexionRepository.save(conexionEntity);
-      
- 
+    
         // Guardar la instalación con la potencia actualizada (solo una vez)
         oInstalacionRepository.save(instalacion);
+    
+        // **💡 NUEVA LÓGICA: Enviar correo electrónico al propietario del inmueble**
+        if (inmueble.getSocio() != null && inmueble.getSocio().getEmail() != null) {
+           enviarmail(nuevaConexion);
+        } else {
+            System.out.println("⚠️ No se pudo enviar el correo: El inmueble no tiene un propietario con email registrado.");
+        }
+    
         return nuevaConexion;
     }
+    
+    public void guardarFirma(Long idConexion, String firmaBase64) {
+        ConexionEntity conexion = oConexionRepository.findById(idConexion)
+            .orElseThrow(() -> new RuntimeException("Conexión no encontrada"));
+    
+        conexion.setFirma(firmaBase64);
+        oConexionRepository.save(conexion);
+    }
+
+    public void enviarmail(ConexionEntity conexionEntity) {
+
+        InmuebleEntity inmueble = validateAndGetInmueble(conexionEntity.getInmueble().getId());
+
+        String emailPropietario = inmueble.getSocio().getEmail();
+        String subject = "Nueva conexión de energía - Consentimiento requerido";
+        String body = "Estimado/a " + inmueble.getSocio().getNombre() + ",\n\n"
+                + "Se ha realizado una nueva conexión entre su inmueble y la instalación de autoconsumo.\n"
+                + "Para continuar con el proceso, por favor, haga clic en el siguiente enlace para firmar la autorización:\n\n"
+                + "http://localhost:4200/conexion/firma/" + conexionEntity.getId() + "\n\n"
+                + "Gracias por su colaboración.\n"
+                + "Comunidad Energética Local.";
+
+        // **📧 Enviar el correo**
+        emailService.sendEmail(emailPropietario, subject, body);
+    }
+
+    public void reenviarmail(ConexionEntity conexionEntity) {
+
+        InmuebleEntity inmueble = validateAndGetInmueble(conexionEntity.getInmueble().getId());
+
+        String emailPropietario = inmueble.getSocio().getEmail();
+        String subject = "Recordatorio: Firma pendiente para la conexión de energía";
+        
+        String body = "Estimado/a " + inmueble.getSocio().getNombre() + ",\n\n"
+                + "Le recordamos que aún no ha firmado la autorización para la conexión entre su inmueble y la instalación de autoconsumo.\n\n"
+                + "Se ha enviado nuevamente la solicitud de firma. Es imprescindible que complete este proceso para mantener activa la conexión.\n"
+                + "Si no realiza la firma en el plazo establecido, la conexión será cancelada automáticamente.\n\n"
+                + "Por favor, haga clic en el siguiente enlace para firmar la autorización:\n\n"
+                + "http://localhost:4200/conexion/firma/" + conexionEntity.getId() + "\n\n"
+                + "Gracias por su colaboración.\n"
+                + "Comunidad Energética Local.";
+        
+
+        // **📧 Enviar el correo**
+        emailService.sendEmail(emailPropietario, subject, body);
+    }
+    
+    
     
     // Método para validar permisos de administrador
     private void validateAdminPermissions() {

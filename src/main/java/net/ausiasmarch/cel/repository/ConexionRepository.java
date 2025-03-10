@@ -19,6 +19,7 @@ public interface ConexionRepository extends JpaRepository<ConexionEntity, Long> 
     ConexionEntity findByInmuebleIdAndInstalacionId(Long inmuebleId, Long instalacionId);
 
 
+    List<ConexionEntity> findByInstalacionId(Long instalacionId);
     //Contante
     Page<ConexionEntity> findByIdContaining(
         String filter1, Pageable oPageable);

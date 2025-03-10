@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import net.ausiasmarch.cel.service.SocioService;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.entity.TipoSocioEntity;
+import net.ausiasmarch.cel.repository.InmuebleRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
@@ -31,6 +33,9 @@ public class Socio {
 
     @Autowired
     SocioService oSocioService;
+
+    @Autowired
+    InmuebleRepository oInmuebleRepository;
 
 
 
@@ -165,6 +170,21 @@ public ResponseEntity<SocioEntity> addInmueble(
     
     return ResponseEntity.ok(updatedSocio);
 }
+
+@GetMapping("/firmas-pendientes/{userId}")
+public ResponseEntity<Boolean> verificarFirmasPendientes(@PathVariable Long userId) {
+    // Obtener los inmuebles del usuario
+    List<InmuebleEntity> inmuebles = oInmuebleRepository.findBySocioId(userId);
+
+    // Buscar conexiones sin firmar de esos inmuebles
+    boolean hayFirmasPendientes = inmuebles.stream()
+        .flatMap(inmueble -> conexionRepository.findByInmuebleIdAndFirmaIsNull(inmueble.getId()).stream())
+        .findAny()
+        .isPresent();
+
+    return ResponseEntity.ok(hayFirmasPendientes);
+}
+
 
 
 }

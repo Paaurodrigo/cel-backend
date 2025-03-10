@@ -6,24 +6,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import net.ausiasmarch.cel.service.PdfGenerationService;
-
+import net.ausiasmarch.cel.service.PdfService;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/pdf")
+@RequestMapping("/api/pdf")
 public class PdfController {
 
-    @Autowired
-    private PdfGenerationService pdfGenerationService;
 
-    @PostMapping("/generatePdf")
-    public ResponseEntity<byte[]> generatePdf(@RequestParam String connectionDetails) {
+    @Autowired
+    private PdfService pdfService;
+
+    @GetMapping("/generate/{instalacionId}")
+    public ResponseEntity<byte[]> generatePdf(@PathVariable Long instalacionId) {
         try {
-            byte[] pdfContent = pdfGenerationService.generateConnectionPdf(connectionDetails);
+            byte[] pdfContent = pdfService.generatePdf(instalacionId);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=connection-details.pdf");
+            headers.add("Content-Disposition", "attachment; filename=acuerdo-autoconsumo.pdf");
             headers.add("Content-Type", "application/pdf");
 
             return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
@@ -31,4 +31,7 @@ public class PdfController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
+
+
