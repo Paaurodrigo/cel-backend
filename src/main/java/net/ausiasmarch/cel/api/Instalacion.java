@@ -48,6 +48,14 @@ public class Instalacion {
         return new ResponseEntity<Long>(oInstalacionService.randomCreate(cantidad), HttpStatus.OK);
     }
 
+    @GetMapping("/disponibles")
+public ResponseEntity<Page<InstalacionEntity>> getInstalacionesDisponibles(
+        Pageable oPageable,
+        @RequestParam Optional<String> filter) {
+    return new ResponseEntity<>(oInstalacionService.getDisponiblesPage(oPageable, filter), HttpStatus.OK);
+}
+
+    
     @GetMapping("/{id}")
     public ResponseEntity<InstalacionEntity> getInstalacion(@PathVariable Long id) {
         return new ResponseEntity<InstalacionEntity>(oInstalacionService.get(id), HttpStatus.OK);

@@ -41,6 +41,17 @@ public class InstalacionService {
         return oInstalacionRepository.count();
     }
 
+    public Page<InstalacionEntity> getDisponiblesPage(Pageable oPageable, Optional<String> filter) {
+        if (filter.isPresent()) {
+            return oInstalacionRepository
+                    .findByPotenciaDisponibleGreaterThanAndNombreContainingIgnoreCase(
+                            0.0, filter.get(), oPageable);
+        } else {
+            return oInstalacionRepository.findByPotenciadisponibleGreaterThan(0.0, oPageable);
+        }
+    }
+    
+
     public Page<InstalacionEntity> getPage(Pageable oPageable, Optional<String> filter) {
 
         if (filter.isPresent()) {

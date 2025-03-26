@@ -40,6 +40,10 @@ public class InstalacionEntity {
     @NotNull
     private Integer preciokw;
 
+    @NotNull
+    @Size(min = 3, max = 255)
+    private String direccion;
+
     @OneToMany(mappedBy = "instalacion", fetch = FetchType.LAZY)
     private java.util.List<ConexionEntity> conexiones;
 
@@ -47,17 +51,19 @@ public class InstalacionEntity {
         this.conexiones = new java.util.ArrayList<>();
     }
 
-    public InstalacionEntity(String nombre,Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw) {
+    public InstalacionEntity(String nombre,Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw, String direccion) {
         this.nombre = nombre;
         this.paneles = paneles;
         this.potenciapanel = potenciapanel;
         this.potenciatotal = potenciatotal;
         this.potenciadisponible = potenciadisponible;
         this.preciokw = preciokw;
+        this.direccion = direccion;
+
         
     }
 
-    public InstalacionEntity(Long id,String nombre, Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw) {
+    public InstalacionEntity(Long id,String nombre, Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw, String direccion) {
         this.id = id;
         this.nombre = nombre;
         this.paneles = paneles;
@@ -65,6 +71,7 @@ public class InstalacionEntity {
         this.potenciatotal = potenciatotal;
         this.potenciadisponible = potenciadisponible;
         this.preciokw = preciokw;
+        this.direccion = direccion;
       
     }
 
@@ -126,6 +133,14 @@ public class InstalacionEntity {
   
     public int getConexiones() {
         return conexiones.size();
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
 }

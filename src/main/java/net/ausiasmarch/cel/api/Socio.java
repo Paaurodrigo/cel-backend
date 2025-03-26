@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lowagie.text.List;
 
 import net.ausiasmarch.cel.service.SocioService;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
@@ -174,7 +175,7 @@ public ResponseEntity<SocioEntity> addInmueble(
 @GetMapping("/firmas-pendientes/{userId}")
 public ResponseEntity<Boolean> verificarFirmasPendientes(@PathVariable Long userId) {
     // Obtener los inmuebles del usuario
-    List<InmuebleEntity> inmuebles = oInmuebleRepository.findBySocioId(userId);
+    List<InmuebleEntity> inmuebles = oInmuebleRepository.findById(userId);
 
     // Buscar conexiones sin firmar de esos inmuebles
     boolean hayFirmasPendientes = inmuebles.stream()
