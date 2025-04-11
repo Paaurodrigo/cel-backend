@@ -40,6 +40,7 @@ public class Instalacion {
 
     @PutMapping("/new")
     public ResponseEntity<InstalacionEntity> create(@RequestBody InstalacionEntity oInstalacionEntity) {
+
         return new ResponseEntity<InstalacionEntity>(oInstalacionService.create(oInstalacionEntity), HttpStatus.OK);
     }
 

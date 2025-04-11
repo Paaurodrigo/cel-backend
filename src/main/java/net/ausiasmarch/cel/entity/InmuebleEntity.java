@@ -78,11 +78,14 @@ public class InmuebleEntity {
     private java.util.List<ConexionEntity> conexiones;
 
 
+@Size(min = 3, max = 255)
+    private String comercializadora;
+
 
     public InmuebleEntity() {
         this.conexiones = new java.util.ArrayList<>();
     }
-    public InmuebleEntity(String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio) {
+    public InmuebleEntity(String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio, String comercializadora) {
         this.cups = cups;
         this.direccion = direccion;
         this.codigopostal = codigopostal;
@@ -97,9 +100,10 @@ public class InmuebleEntity {
         this.intencion = intencion;
         this.recomendacion = recomendacion;
         this.socio = socio;
+        this.comercializadora = comercializadora;
     }
 
-    public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio) {
+    public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio, String comercializadora) {
         this.id = id;
         this.cups = cups;
         this.direccion = direccion;
@@ -115,6 +119,7 @@ public class InmuebleEntity {
         this.intencion = intencion;
         this.recomendacion = recomendacion;
         this.socio = socio;
+        this.comercializadora = comercializadora;
     }
 
     public Long getId() {
@@ -213,6 +218,14 @@ public class InmuebleEntity {
 
     public int getConexiones() {
         return conexiones.size();
+    }
+
+    public String getComercializadora() {
+        return comercializadora;
+    }
+
+    public void setComercializadora(String comercializadora) {
+        this.comercializadora = comercializadora;
     }
 
    

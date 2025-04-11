@@ -1,4 +1,9 @@
 package net.ausiasmarch.cel.entity;
+import java.time.Instant;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,8 +34,10 @@ public class ConexionEntity {
 
     @NotNull
     private double potencia;
-    @NotNull    
-    private String fecha;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime fecha;
+    
     @NotNull
     private double porcentaje;
   @Lob
@@ -50,7 +57,7 @@ public class ConexionEntity {
     public ConexionEntity() {
     }
 
-    public ConexionEntity(double potencia , String fecha, double porcentaje
+    public ConexionEntity(double potencia , LocalDateTime fecha, double porcentaje
     ) {
         this.potencia = potencia;
         this.fecha = fecha;
@@ -74,11 +81,11 @@ public class ConexionEntity {
         this.potencia = potencia;
     }
 
-    public String getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

@@ -40,9 +40,29 @@ public class Conexion {
   }
 
   @PostMapping("/new")
-    public ResponseEntity<ConexionEntity> create(@RequestBody ConexionEntity oConexionEntity) {
-        return new ResponseEntity<ConexionEntity>(oConexionService.create(oConexionEntity), HttpStatus.OK);
+public ResponseEntity<ConexionEntity> create(@RequestBody ConexionEntity oConexionEntity) {
+
+    System.out.println("📥 Datos recibidos en /conexion/new:");
+    System.out.println("Fecha: " + oConexionEntity.getFecha());
+    System.out.println("Potencia: " + oConexionEntity.getPotencia());
+    System.out.println("Porcentaje: " + oConexionEntity.getPorcentaje());
+    System.out.println("Firma: " + oConexionEntity.getFirma());
+    System.out.println("ID: " + oConexionEntity.getId());
+    if (oConexionEntity.getInmueble() != null) {
+        System.out.println("Inmueble ID: " + oConexionEntity.getInmueble().getId());
+    } else {
+        System.out.println("Inmueble: null");
     }
+
+    if (oConexionEntity.getInstalacion() != null) {
+        System.out.println("Instalación ID: " + oConexionEntity.getInstalacion().getId());
+    } else {
+        System.out.println("Instalación: null");
+    }
+
+    return new ResponseEntity<>(oConexionService.create(oConexionEntity), HttpStatus.OK);
+}
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ConexionEntity> get(@PathVariable Long id) {

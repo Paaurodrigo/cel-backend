@@ -84,6 +84,7 @@ public class Socio {
         oSocioEntity.setDireccionfiscal(direccionfiscal);
         oSocioEntity.setCodigopostal(codigopostal);
         oSocioEntity.setTiposocio(tiposocio);
+      
     
         // Guardar el socio en la base de datos
         SocioEntity savedSocio = oSocioService.create(oSocioEntity);
@@ -172,19 +173,19 @@ public ResponseEntity<SocioEntity> addInmueble(
     return ResponseEntity.ok(updatedSocio);
 }
 
-@GetMapping("/firmas-pendientes/{userId}")
-public ResponseEntity<Boolean> verificarFirmasPendientes(@PathVariable Long userId) {
-    // Obtener los inmuebles del usuario
-    List<InmuebleEntity> inmuebles = oInmuebleRepository.findById(userId);
+// @GetMapping("/firmas-pendientes/{userId}")
+// public ResponseEntity<Boolean> verificarFirmasPendientes(@PathVariable Long userId) {
+//     // Obtener los inmuebles del usuario
+//     List<InmuebleEntity> inmuebles = oInmuebleRepository.findById(userId);
 
-    // Buscar conexiones sin firmar de esos inmuebles
-    boolean hayFirmasPendientes = inmuebles.stream()
-        .flatMap(inmueble -> conexionRepository.findByInmuebleIdAndFirmaIsNull(inmueble.getId()).stream())
-        .findAny()
-        .isPresent();
+//     // Buscar conexiones sin firmar de esos inmuebles
+//     boolean hayFirmasPendientes = inmuebles.stream()
+//         .flatMap(inmueble -> conexionRepository.findByInmuebleIdAndFirmaIsNull(inmueble.getId()).stream())
+//         .findAny()
+//         .isPresent();
 
-    return ResponseEntity.ok(hayFirmasPendientes);
-}
+//     return ResponseEntity.ok(hayFirmasPendientes);
+// }
 
 
 

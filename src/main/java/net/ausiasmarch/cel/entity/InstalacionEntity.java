@@ -51,7 +51,12 @@ public class InstalacionEntity {
         this.conexiones = new java.util.ArrayList<>();
     }
 
-    public InstalacionEntity(String nombre,Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw, String direccion) {
+    @NotNull
+    @Size(min = 3, max = 35)
+    private String cau;
+
+
+    public InstalacionEntity(String nombre,Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw, String direccion, String cau) {
         this.nombre = nombre;
         this.paneles = paneles;
         this.potenciapanel = potenciapanel;
@@ -59,11 +64,12 @@ public class InstalacionEntity {
         this.potenciadisponible = potenciadisponible;
         this.preciokw = preciokw;
         this.direccion = direccion;
+        this.cau = cau;
 
         
     }
 
-    public InstalacionEntity(Long id,String nombre, Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw, String direccion) {
+    public InstalacionEntity(Long id,String nombre, Integer paneles, Double potenciapanel, Double potenciatotal, Double potenciadisponible, Integer preciokw, String direccion, String cau) {
         this.id = id;
         this.nombre = nombre;
         this.paneles = paneles;
@@ -72,6 +78,7 @@ public class InstalacionEntity {
         this.potenciadisponible = potenciadisponible;
         this.preciokw = preciokw;
         this.direccion = direccion;
+        this.cau = cau;
       
     }
 
@@ -141,6 +148,14 @@ public class InstalacionEntity {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getCau() {
+        return cau;
+    }
+
+    public void setCau(String cau) {
+        this.cau = cau;
     }
 
 }
