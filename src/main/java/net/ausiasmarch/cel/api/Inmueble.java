@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.persistence.EntityNotFoundException;
 import net.ausiasmarch.cel.entity.ConexionEntity;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.InstalacionEntity;
+import net.ausiasmarch.cel.exception.UnauthorizedAccessException;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
 import net.ausiasmarch.cel.service.InmuebleService;
 
@@ -74,10 +76,20 @@ public class Inmueble {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> delete(@PathVariable Long id) {
-        return new ResponseEntity<Long>(oInmuebleService.delete(id), HttpStatus.OK);
-
+public ResponseEntity<?> delete(@PathVariable Long id, @RequestParam(required = false) Boolean force) {
+    try {
+        boolean forceDelete = force != null && force;
+        Long deletedId = oInmuebleService.delete(id, forceDelete);
+        return new ResponseEntity<>(deletedId, HttpStatus.OK);
+    } catch (IllegalStateException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    } catch (EntityNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (UnauthorizedAccessException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
+}
+
 
     @GetMapping("/sin-socio")
 public ResponseEntity<List<InmuebleEntity>> getInmueblesSinSocio() {

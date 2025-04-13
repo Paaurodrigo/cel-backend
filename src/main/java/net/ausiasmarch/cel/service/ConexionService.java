@@ -1,5 +1,6 @@
 package net.ausiasmarch.cel.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -330,7 +331,7 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
         for (int i = 0; i < cantidad; i++) {
             ConexionEntity oConexionEntity = new ConexionEntity();
             oConexionEntity.setPotencia(oRandomService.getRandomInt(2, 234));
-            oConexionEntity.setFecha(arrFechas[oRandomService.getRandomInt(0, arrFechas.length - 1)]);
+            oConexionEntity.setFecha(LocalDateTime.now());
             oConexionEntity.setPorcentaje(oRandomService.getRandomInt(0, 100));
             oConexionEntity.setInstalacion(oInstalacionService.randomSelection());
             oConexionEntity.setInmueble(oInmuebleService.randomSelection());    

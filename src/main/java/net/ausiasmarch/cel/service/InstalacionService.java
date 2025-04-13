@@ -1,5 +1,6 @@
 package net.ausiasmarch.cel.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import net.ausiasmarch.cel.api.Instalacion;
+import net.ausiasmarch.cel.entity.ConexionEntity;
 import net.ausiasmarch.cel.entity.InstalacionEntity;
+import net.ausiasmarch.cel.repository.ConexionRepository;
 import net.ausiasmarch.cel.repository.InstalacionRepository;
 
 @Service
@@ -16,6 +20,9 @@ public class InstalacionService {
 
     @Autowired
     InstalacionRepository oInstalacionRepository;
+
+    @Autowired
+    ConexionRepository oConexionRepository;
 
     @Autowired
     RandomService oRandomService;
@@ -72,9 +79,27 @@ public class InstalacionService {
         return oInstalacionRepository.count();
     }
 
-    public Long delete(Long id) {
+    public Long delete(Long id, boolean force) {
+        // Comprobamos si la instalación existe
+        InstalacionEntity instalacion = oInstalacionRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Instalación no encontrada"));
+
+        // Buscamos las conexiones asociadas
+        List<ConexionEntity> conexiones = oConexionRepository.findByInstalacionId(id);
+
+        if (!conexiones.isEmpty()) {
+            if (!force) {
+                // Si hay conexiones y no se ha pedido "force", lanzamos excepción controlada
+                throw new IllegalStateException("La instalación tiene conexiones asociadas. Confirma si deseas eliminar también las conexiones.");
+            }
+            // Si se confirma, eliminamos las conexiones primero
+            oConexionRepository.deleteAll(conexiones);
+        }
+
+        // Ahora eliminamos la instalación
         oInstalacionRepository.deleteById(id);
-        return 1L;
+
+        return id;
     }
 
     public InstalacionEntity create(InstalacionEntity oInstalacionEntity) {

@@ -1,4 +1,5 @@
 package net.ausiasmarch.cel.service;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,8 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
-public class InmuebleService implements ServiceInterface<InmuebleEntity>{
+public class InmuebleService {
     
  @Autowired
     InmuebleRepository oInmuebleRepository;
@@ -127,14 +130,31 @@ public class InmuebleService implements ServiceInterface<InmuebleEntity>{
         return oInmuebleRepository.count();
     }
 
-    public Long delete(Long id) {
-        if (oAuthService.isAdmin()) {
-        oInmuebleRepository.deleteById(id);
-        return 1L;
-    }else {
-        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    public Long delete(Long id, boolean force) {
+    if (!oAuthService.isAdmin()) {
+        throw new UnauthorizedAccessException("No tienes permisos para eliminar el inmueble");
     }
+
+    // Verificamos si el inmueble existe
+    InmuebleEntity inmueble = oInmuebleRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Inmueble no encontrado"));
+
+    // Buscamos conexiones asociadas
+    List<ConexionEntity> conexiones = oConexionRepository.findByInmuebleId(id);
+
+    if (!conexiones.isEmpty()) {
+        if (!force) {
+            throw new IllegalStateException("El inmueble tiene conexiones asociadas. Confirma si deseas eliminar también las conexiones.");
+        }
+        // Si se fuerza, eliminamos primero las conexiones
+        oConexionRepository.deleteAll(conexiones);
     }
+
+    // Eliminamos el inmueble
+    oInmuebleRepository.deleteById(id);
+
+    return id;
+}
 
      public InmuebleEntity create(InmuebleEntity oInmuebleEntity) {
         

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.persistence.EntityNotFoundException;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.InstalacionEntity;
 import net.ausiasmarch.cel.service.InstalacionService;
@@ -68,9 +69,21 @@ public ResponseEntity<Page<InstalacionEntity>> getInstalacionesDisponibles(
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> delete(@PathVariable Long id) {
-        return new ResponseEntity<Long>(oInstalacionService.delete(id), HttpStatus.OK);
+    public ResponseEntity<?> delete(@PathVariable Long id, @RequestParam(required = false) Boolean force) {
+        try {
+            // Si force no viene en la URL, lo dejamos como false
+            boolean forceDelete = force != null && force;
+            Long deletedId = oInstalacionService.delete(id, forceDelete);
+            return new ResponseEntity<>(deletedId, HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            // Devuelve 409 Conflict si hay conexiones y no hay force
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (EntityNotFoundException e) {
+            // Si no se encuentra la instalación
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
+    
 
     @GetMapping("/xinmueble/{id_inmueble}")
     public ResponseEntity<Page<InstalacionEntity>> getPageXtTpoapunte(
