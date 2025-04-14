@@ -16,7 +16,7 @@ public class CorsGlobalConfig {
         System.out.println("🟢 Configuración CORS aplicada correctamente");
 
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Permitir Angular
+        config.setAllowedOrigins(Arrays.asList("https://cel-frontend.vercel.app")); // Permitir Angular
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
         config.setAllowedHeaders(Arrays.asList("*")); // Permitir todos los headers
         config.setExposedHeaders(Arrays.asList("Content-Disposition")); // Permitir headers en respuesta

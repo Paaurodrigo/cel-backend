@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import net.ausiasmarch.cel.bean.LogindataBean;
 import net.ausiasmarch.cel.service.AuthService;
 
-
-
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/auth")
