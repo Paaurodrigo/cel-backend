@@ -10,7 +10,6 @@ import java.util.Arrays;
 
 @Configuration
 public class CorsGlobalConfig {
-
     @Bean
     public CorsFilter corsFilter() {
         System.out.println("🟢 Configuración CORS aplicada correctamente");

@@ -111,7 +111,7 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
         String body = "Estimado/a " + inmueble.getSocio().getNombre() + ",\n\n"
                 + "Se ha realizado una nueva conexión entre su inmueble y la instalación de autoconsumo.\n"
                 + "Para continuar con el proceso, por favor, haga clic en el siguiente enlace para firmar la autorización:\n\n"
-                + "http://localhost:4200/conexion/firma/" + conexionEntity.getId() + "\n\n"
+                + "https://www.solarcel.online/conexion/firma/" + conexionEntity.getId() + "\n\n"
                 + "Gracias por su colaboración.\n"
                 + "Comunidad Energética Local.";
 
