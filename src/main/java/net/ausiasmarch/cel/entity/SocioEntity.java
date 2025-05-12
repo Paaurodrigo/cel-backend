@@ -1,5 +1,6 @@
 package net.ausiasmarch.cel.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class SocioEntity {
 
     @NotNull
     private Integer codigopostal;
+
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "tiposocio")

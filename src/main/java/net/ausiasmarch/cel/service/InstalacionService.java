@@ -63,8 +63,8 @@ public class InstalacionService {
 
         if (filter.isPresent()) {
             return oInstalacionRepository
-                    .findByNombreContaining(
-                            filter.get(),
+                    .findByNombreContainingOrCauContaining(
+                            filter.get(), filter.get(),
                             oPageable);
         } else {
             return oInstalacionRepository.findAll(oPageable);
@@ -153,8 +153,8 @@ public class InstalacionService {
                                 oPageable);
             } else {
                 return oInstalacionRepository
-                        .findByNombreContaining(
-                                filter.get(),
+                        .findByNombreContainingOrCauContaining(
+                                filter.get(),filter.get(),
                                 oPageable);
             }
         } else {

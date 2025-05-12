@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import net.ausiasmarch.cel.entity.ConexionEntity;
 import net.ausiasmarch.cel.entity.InmuebleEntity;
 import net.ausiasmarch.cel.entity.InstalacionEntity;
-import net.ausiasmarch.cel.entity.SocioEntity;
 import net.ausiasmarch.cel.exception.ResourceNotFoundException;
 import net.ausiasmarch.cel.exception.UnauthorizedAccessException;
 import net.ausiasmarch.cel.repository.ConexionRepository;
 import net.ausiasmarch.cel.repository.InmuebleRepository;
+import net.ausiasmarch.cel.repository.InstalacionRepository;
 import net.ausiasmarch.cel.repository.SocioRepository;
 
 import org.springframework.data.domain.Page;
@@ -26,6 +26,9 @@ public class InmuebleService {
     
  @Autowired
     InmuebleRepository oInmuebleRepository;
+
+    @Autowired
+    InstalacionRepository oInstalacionRepository;
 
     @Autowired
     ConexionRepository oConexionRepository;
@@ -72,8 +75,8 @@ public class InmuebleService {
             oInmuebleEntity.setCodigoPostal(oRandomService.getRandomInt(9999, 99999));
             oInmuebleEntity.setMunicipio(arrNombres[oRandomService.getRandomInt(0, arrNombres.length - 1)]);
             oInmuebleEntity.setRefCatas("ref1");
-            oInmuebleEntity.setPotencia1(443);
-            oInmuebleEntity.setPotencia2(560);
+            oInmuebleEntity.setPotencia1(443.0);
+            oInmuebleEntity.setPotencia2(560.0);
             oInmuebleEntity.setTension(445);
             oInmuebleEntity.setUso(arrNombres[oRandomService.getRandomInt(0, arrNombres.length - 1)]);
             oInmuebleEntity.setConsumoAnual(oRandomService.getRandomInt(3, 200));
@@ -94,8 +97,8 @@ public class InmuebleService {
 
         if (filter.isPresent()) {
             return oInmuebleRepository
-                    .findByCupsContainingOrDireccionContainingOrCodigopostalContainingOrMunicipioContainingOrRefcatasContainingOrPotencia1ContainingOrPotencia2ContainingOrTensionContainingOrUsoContainingOrConsumoAnualContainingOrHabitosContainingOrIntencionContaining(
-                            filter.get(), filter.get(),filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), filter.get(), 
+                    .findByCupsContainingOrDireccionContaining(
+                            filter.get(), filter.get(),
                             oPageable);
         } else {
             return oInmuebleRepository.findAll(oPageable);
@@ -131,30 +134,43 @@ public class InmuebleService {
     }
 
     public Long delete(Long id, boolean force) {
-    if (!oAuthService.isAdmin()) {
-        throw new UnauthorizedAccessException("No tienes permisos para eliminar el inmueble");
-    }
-
-    // Verificamos si el inmueble existe
-    InmuebleEntity inmueble = oInmuebleRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("Inmueble no encontrado"));
-
-    // Buscamos conexiones asociadas
-    List<ConexionEntity> conexiones = oConexionRepository.findByInmuebleId(id);
-
-    if (!conexiones.isEmpty()) {
-        if (!force) {
-            throw new IllegalStateException("El inmueble tiene conexiones asociadas. Confirma si deseas eliminar también las conexiones.");
+        if (!oAuthService.isAdmin()) {
+            throw new UnauthorizedAccessException("No tienes permisos para eliminar el inmueble");
         }
-        // Si se fuerza, eliminamos primero las conexiones
-        oConexionRepository.deleteAll(conexiones);
+    
+        // Verificamos si el inmueble existe
+        InmuebleEntity inmueble = oInmuebleRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Inmueble no encontrado"));
+    
+        // Buscamos conexiones asociadas
+        List<ConexionEntity> conexiones = oConexionRepository.findByInmuebleId(id);
+    
+        if (!conexiones.isEmpty()) {
+            if (!force) {
+                throw new IllegalStateException("El inmueble tiene conexiones asociadas. Confirma si deseas eliminar también las conexiones.");
+            }
+    
+            // 💡 Recorremos conexiones y actualizamos potencia de la instalación
+            for (ConexionEntity conexion : conexiones) {
+                InstalacionEntity instalacion = conexion.getInstalacion();
+                if (instalacion != null) {
+                    instalacion.setPotenciaDisponible(
+                        instalacion.getPotenciaDisponible() + conexion.getPotencia()
+                    );
+                    oInstalacionRepository.save(instalacion);
+                }
+            }
+    
+            // Eliminamos conexiones
+            oConexionRepository.deleteAll(conexiones);
+        }
+    
+        // Eliminamos el inmueble
+        oInmuebleRepository.deleteById(id);
+    
+        return id;
     }
-
-    // Eliminamos el inmueble
-    oInmuebleRepository.deleteById(id);
-
-    return id;
-}
+    
 
      public InmuebleEntity create(InmuebleEntity oInmuebleEntity) {
         

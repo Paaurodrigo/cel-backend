@@ -44,10 +44,10 @@ public class InmuebleEntity {
     private String refcatas;
 
     @NotNull
-    private Integer potencia1;
+    private Double potencia1;
 
     @NotNull
-    private Integer potencia2;
+    private Double potencia2;
 
     @NotNull
     private Integer tension;
@@ -63,12 +63,14 @@ public class InmuebleEntity {
     @Size(min = 3, max = 255)
     private String habitos;
 
-    @NotNull
+
     @Size(min = 3, max = 255)
     private String intencion;
 
     @Size(min = 3, max = 255)
     private String recomendacion;
+    @Size(min = 1, max = 255)
+    private String puerta;
 
  @ManyToOne(fetch = jakarta.persistence.FetchType.EAGER)
     @JoinColumn(name = "id_socio")
@@ -85,7 +87,7 @@ public class InmuebleEntity {
     public InmuebleEntity() {
         this.conexiones = new java.util.ArrayList<>();
     }
-    public InmuebleEntity(String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio, String comercializadora) {
+    public InmuebleEntity(String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Double potencia1, Double potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio, String comercializadora, String puerta) {
         this.cups = cups;
         this.direccion = direccion;
         this.codigopostal = codigopostal;
@@ -101,9 +103,10 @@ public class InmuebleEntity {
         this.recomendacion = recomendacion;
         this.socio = socio;
         this.comercializadora = comercializadora;
+        this.puerta = puerta;
     }
 
-    public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Integer potencia1, Integer potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio, String comercializadora) {
+    public InmuebleEntity(Long id,String cups, String direccion, Integer codigopostal, String municipio, String refcatas, Double potencia1, Double potencia2, Integer tension, String uso, Integer consumoanual, String habitos, String intencion, String recomendacion, SocioEntity socio, String comercializadora, String puerta) {
         this.id = id;
         this.cups = cups;
         this.direccion = direccion;
@@ -120,6 +123,7 @@ public class InmuebleEntity {
         this.recomendacion = recomendacion;
         this.socio = socio;
         this.comercializadora = comercializadora;
+        this.puerta = puerta;
     }
 
     public Long getId() {
@@ -158,16 +162,16 @@ public class InmuebleEntity {
     public void setRefCatas(String refcatas) {
         this.refcatas = refcatas;
     }
-    public Integer getPotencia1() {
+    public Double getPotencia1() {
         return potencia1;
     }
-    public void setPotencia1(Integer potencia1) {
+    public void setPotencia1(Double potencia1) {
         this.potencia1 = potencia1;
     }
-    public Integer getPotencia2() {
+    public Double getPotencia2() {
         return potencia2;
     }
-    public void setPotencia2(Integer potencia2) {
+    public void setPotencia2(Double potencia2) {
         this.potencia2 = potencia2;
     }
     public Integer getTension() {
@@ -226,6 +230,14 @@ public class InmuebleEntity {
 
     public void setComercializadora(String comercializadora) {
         this.comercializadora = comercializadora;
+    }
+
+    public String getPuerta() {
+        return puerta;
+    }
+
+    public void setPuerta(String puerta) {
+        this.puerta = puerta;
     }
 
    

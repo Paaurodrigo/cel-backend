@@ -10,8 +10,8 @@ import net.ausiasmarch.cel.entity.InstalacionEntity;
 
 public interface InstalacionRepository extends JpaRepository<InstalacionEntity, Long>  {
     
-     Page<InstalacionEntity> findByNombreContaining(
-            String filter2, Pageable oPageable);
+     Page<InstalacionEntity> findByNombreContainingOrCauContaining(
+            String filter2, String filter3, Pageable oPageable);
 
             @Query(value = "SELECT i.* FROM instalacion i, conexion c WHERE i.id = c.instalacion and c.inmueble=:inmueble", nativeQuery = true)
             Page<InstalacionEntity> findAllXInmueble(Long inmueble, Pageable oPageable);

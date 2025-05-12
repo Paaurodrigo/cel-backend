@@ -10,8 +10,8 @@ import net.ausiasmarch.cel.entity.SocioEntity;
 
 public interface SocioRepository extends JpaRepository<SocioEntity, Long> {
 
-    Page<SocioEntity> findByDNIContainingOrNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContainingOrTelefonoContainingOrDireccionfiscalContainingOrCodigopostalContainingOrInmueblesContaining(
-            String filter2, String filter3, String filter4, String filter5, String filter6, String filter7,String filter8, String filter9,String filter10, Pageable oPageable);
+    Page<SocioEntity> findByDNIContainingOrNombreContainingOrApellido1ContainingOrApellido2ContainingOrEmailContaining(
+            String filter2, String filter3, String filter4, String filter5, String filter6, Pageable oPageable);
 
             Optional<SocioEntity> findByEmail(String email);
 

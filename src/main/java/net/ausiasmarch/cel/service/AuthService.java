@@ -1,11 +1,13 @@
 package net.ausiasmarch.cel.service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import net.ausiasmarch.cel.bean.LogindataBean;
 import net.ausiasmarch.cel.entity.SocioEntity;
@@ -80,6 +82,9 @@ public class AuthService {
         SocioEntity oSocioEntity = this.getSocioFromToken();
         return this.isMiembro() && oSocioEntity.getId() == id;
     }
+
+
+   
 
 
 
