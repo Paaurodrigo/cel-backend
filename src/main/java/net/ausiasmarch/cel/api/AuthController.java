@@ -53,7 +53,7 @@ public class AuthController {
         SocioEntity oSocio = oSocioRepository.findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("No existe ningún socio con ese email"));
     
-        String enlace = "http://localhost:4200/reset-password/" + oSocio.getId();
+        String enlace = "https://www.solarcel.online/reset-password/" + oSocio.getId();
         emailService.sendPasswordChangeLink(oSocio.getEmail(), enlace);
     
         return ResponseEntity.ok(Map.of("message", "Correo enviado"));

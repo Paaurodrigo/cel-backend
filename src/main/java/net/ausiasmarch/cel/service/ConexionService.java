@@ -107,14 +107,19 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
         InmuebleEntity inmueble = validateAndGetInmueble(conexionEntity.getInmueble().getId());
 
         String emailPropietario = inmueble.getSocio().getEmail();
-        String subject = "Nueva conexión de energía - Consentimiento requerido";
+        String subject = "Nueva conexión de energía - Consentimiento y siguiente paso";
+        
         String body = "Estimado/a " + inmueble.getSocio().getNombre() + ",\n\n"
-                + "Se ha realizado una nueva conexión entre su inmueble y la instalación de autoconsumo.\n"
-                + "Para continuar con el proceso, por favor, haga clic en el siguiente enlace para firmar la autorización:\n\n"
-                + "https://www.solarcel.online/conexion/firma/" + conexionEntity.getId() + "\n\n"
-                 + "localhost:4200/conexion/firma/" + conexionEntity.getId() + "\n\n"
-                + "Gracias por su colaboración.\n"
-                + "Comunidad Energética Local.";
+            + "Se ha realizado una nueva conexión entre su inmueble y la instalación de autoconsumo.\n"
+            + "Para continuar con el proceso, por favor, haga clic en el siguiente enlace para firmar la autorización:\n\n"
+            + "https://www.solarcel.online/conexion/firma/" + conexionEntity.getId() + "\n\n"
+            + "Una vez haya firmado, el siguiente paso será realizar la transferencia bancaria al siguiente número de cuenta:\n"
+            + "IBAN: ES00 0000 0000 0000 0000 0000\n\n"
+            + "Por favor, incluya en el concepto de la transferencia su nombre y el ID de la conexión.\n\n"
+            + "Gracias por su colaboración.\n"
+            + "Atentamente,\n"
+            + "Comunidad Energética Local.";
+        
 
         // **📧 Enviar el correo**
         emailService.sendEmail(emailPropietario, subject, body);

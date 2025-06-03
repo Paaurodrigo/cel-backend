@@ -97,16 +97,16 @@ public class Socio {
     @GetMapping("/check-email")
     public ResponseEntity<Boolean> checkEmailExists(@RequestParam("email") String email) {
         boolean existe = oSocioService.existsByEmail(email);
-        return new ResponseEntity<>(existe, HttpStatus.OK);
+        return ResponseEntity.ok(existe); // devuelve JSON true o false
     }
 
     // Comprueba si existe un socio con el DNI dado
     @GetMapping("/check-dni")
     public ResponseEntity<Boolean> checkDniExists(@RequestParam("dni") String dni) {
         boolean existe = oSocioService.existsByDni(dni);
-        return new ResponseEntity<>(existe, HttpStatus.OK);
+        return ResponseEntity.ok(existe); // devuelve JSON true o false
     }
-    
+
     @PutMapping("/new/byadmin")
     public ResponseEntity<SocioEntity> createSocioByAdmin(
        
@@ -187,19 +187,7 @@ public ResponseEntity<SocioEntity> addInmueble(
     return ResponseEntity.ok(updatedSocio);
 }
 
-// @GetMapping("/firmas-pendientes/{userId}")
-// public ResponseEntity<Boolean> verificarFirmasPendientes(@PathVariable Long userId) {
-//     // Obtener los inmuebles del usuario
-//     List<InmuebleEntity> inmuebles = oInmuebleRepository.findById(userId);
 
-//     // Buscar conexiones sin firmar de esos inmuebles
-//     boolean hayFirmasPendientes = inmuebles.stream()
-//         .flatMap(inmueble -> conexionRepository.findByInmuebleIdAndFirmaIsNull(inmueble.getId()).stream())
-//         .findAny()
-//         .isPresent();
-
-//     return ResponseEntity.ok(hayFirmasPendientes);
-// }
 
 
 
