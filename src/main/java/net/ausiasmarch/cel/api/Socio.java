@@ -93,6 +93,20 @@ public class Socio {
         
     }
     
+    // Comprueba si existe un socio con el email dado
+    @GetMapping("/check-email")
+    public ResponseEntity<Boolean> checkEmailExists(@RequestParam("email") String email) {
+        boolean existe = oSocioService.existsByEmail(email);
+        return new ResponseEntity<>(existe, HttpStatus.OK);
+    }
+
+    // Comprueba si existe un socio con el DNI dado
+    @GetMapping("/check-dni")
+    public ResponseEntity<Boolean> checkDniExists(@RequestParam("dni") String dni) {
+        boolean existe = oSocioService.existsByDni(dni);
+        return new ResponseEntity<>(existe, HttpStatus.OK);
+    }
+    
     @PutMapping("/new/byadmin")
     public ResponseEntity<SocioEntity> createSocioByAdmin(
        

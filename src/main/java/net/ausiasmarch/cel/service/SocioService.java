@@ -157,6 +157,14 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
         return oSocioRepository.count();
     }
 
+    public boolean existsByEmail(String email) {
+        return oSocioRepository.existsByEmail(email);
+    }
+
+    public boolean existsByDni(String dni) {
+        return oSocioRepository.existsByDNI(dni);
+    }
+
     public Long delete(Long id) {
         if (oAuthService.isAdmin()) {
         oSocioRepository.deleteById(id);
