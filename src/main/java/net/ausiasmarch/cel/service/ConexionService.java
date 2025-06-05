@@ -115,7 +115,9 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
             + "https://www.solarcel.online/conexion/firma/" + conexionEntity.getId() + "\n\n"
             + "Una vez haya firmado, el siguiente paso será realizar la transferencia bancaria al siguiente número de cuenta:\n"
             + "IBAN: ES00 0000 0000 0000 0000 0000\n\n"
+            + "El ID de la conexion es " + conexionEntity.getId() + ".\n"
             + "Por favor, incluya en el concepto de la transferencia su nombre y el ID de la conexión.\n\n"
+            + "El importe sera de " + conexionEntity.getPotencia()*conexionEntity.getInstalacion().getPrecioKw() + " euros.\n"
             + "Gracias por su colaboración.\n"
             + "Atentamente,\n"
             + "Comunidad Energética Local.";
