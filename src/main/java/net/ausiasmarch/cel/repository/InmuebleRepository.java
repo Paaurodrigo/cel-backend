@@ -43,7 +43,7 @@ public interface InmuebleRepository extends JpaRepository<InmuebleEntity, Long> 
 
 
 
-           
+         long countBySocioId(Long idSocio);
             
 
             

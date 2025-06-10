@@ -164,15 +164,25 @@ public SocioEntity uploadFotoDNI(Long id, byte[] fotoDNI) {
     public boolean existsByDni(String dni) {
         return oSocioRepository.existsByDNI(dni);
     }
-
     public Long delete(Long id) {
         if (oAuthService.isAdmin()) {
-        oSocioRepository.deleteById(id);
-        return 1L;
-    }else {
-        throw new UnauthorizedAccessException("No tienes permisos para crear el usuario");
+    
+            // 👇 Aquí hacemos la comprobación
+            long inmueblesCount = oInmuebleRepository.countBySocioId(id);
+    
+            if (inmueblesCount > 0) {
+                throw new RuntimeException("No se puede eliminar un socio que tiene inmuebles asociados.");
+            }
+    
+            // Si no tiene inmuebles → eliminar
+            oSocioRepository.deleteById(id);
+            return 1L;
+    
+        } else {
+            throw new UnauthorizedAccessException("No tienes permisos para eliminar el usuario");
+        }
     }
-    }
+    
 
     public SocioEntity create(SocioEntity oSocioEntity) { 
             
