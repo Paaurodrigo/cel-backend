@@ -263,6 +263,10 @@ public class InmuebleService {
     }
 }
 
+public boolean existsByCups(String cups) {
+    return oInmuebleRepository.existsByCups(cups);
+}
+
 
     
 

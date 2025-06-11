@@ -45,6 +45,7 @@ public interface InmuebleRepository extends JpaRepository<InmuebleEntity, Long> 
 
          long countBySocioId(Long idSocio);
             
+         boolean existsByCups(String cups);
 
             
 

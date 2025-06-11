@@ -90,6 +90,12 @@ public ResponseEntity<?> delete(@PathVariable Long id, @RequestParam(required = 
     }
 }
 
+@GetMapping("/check-cups")
+    public ResponseEntity<Boolean> checkCupsExists(@RequestParam("cups") String cups) {
+        boolean existe = oInmuebleService.existsByCups(cups);
+        return ResponseEntity.ok(existe); // devuelve JSON true o false
+    }
+
 
     @GetMapping("/sin-socio")
 public ResponseEntity<List<InmuebleEntity>> getInmueblesSinSocio() {
