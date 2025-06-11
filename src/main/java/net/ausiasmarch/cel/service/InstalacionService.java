@@ -167,4 +167,9 @@ public class InstalacionService {
         }
     }
 
+    public boolean existsByCau(String cau) {
+        return oInstalacionRepository.existsByCau(cau);
+    }
+    
+
 }

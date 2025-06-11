@@ -29,5 +29,8 @@ public interface InstalacionRepository extends JpaRepository<InstalacionEntity, 
 Page<InstalacionEntity> findByPotenciaDisponibleGreaterThanAndNombreContainingIgnoreCase(
         Double potenciadisponible, String nombre, Pageable pageable);
 
+        
+        boolean existsByCau(String cau);
+
 
 }

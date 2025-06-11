@@ -96,4 +96,11 @@ public ResponseEntity<Page<InstalacionEntity>> getInstalacionesDisponibles(
         }
     }
 
+    @GetMapping("/check-cau")
+public ResponseEntity<Boolean> checkCauExists(@RequestParam("cau") String cau) {
+    boolean existe = oInstalacionService.existsByCau(cau);
+    return ResponseEntity.ok(existe);
+}
+
+
 }
