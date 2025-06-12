@@ -35,16 +35,6 @@ public class PdfService {
             Font titleFont = new Font(Font.HELVETICA, 16, Font.BOLD);
             Font boldFont = new Font(Font.HELVETICA, 12, Font.BOLD);
 
-            // 🔹 Título
-            Paragraph title = new Paragraph("ACUERDO DE REPARTO DE ENERGÍA DE AUTOCONSUMO COLECTIVO", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
-            document.add(new Paragraph("\n"));
-
-            // 🔹 Información básica
-            document.add(new Paragraph("CÓDIGO DE AUTOCONSUMO (CAU): ES0135000361028305LA0FA001", boldFont));
-            document.add(new Paragraph("\n"));
-
             // 🔹 Obtener conexiones
             List<ConexionEntity> conexiones = conexionRepository.findByInstalacionId(instalacionId);
 
@@ -109,13 +99,15 @@ document.add(new Paragraph("\n"));
 PdfPTable cauTable = new PdfPTable(2);
 cauTable.setWidthPercentage(100);
 cauTable.setSpacingBefore(20);
-cauTable.setWidths(new float[]{3, 7});
+cauTable.setWidths(new float[]{6, 4});
 
 PdfPCell cauLabel = new PdfPCell(new Phrase("CÓDIGO DE AUTOCONSUMO (CAU)", boldFont));
 cauLabel.setHorizontalAlignment(Element.ALIGN_CENTER);
 cauLabel.setVerticalAlignment(Element.ALIGN_MIDDLE);
 cauLabel.setFixedHeight(30);
 cauTable.addCell(cauLabel);
+
+
 
 PdfPCell cauValue = new PdfPCell(new Phrase("ES0135000361028305LA0FA001")); // aquí puedes parametrizar el CAU
 cauValue.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -130,16 +122,43 @@ document.add(new Paragraph("\n"));
                 PdfPTable table = new PdfPTable(5);
                 table.setWidthPercentage(100);
                 table.setSpacingBefore(10);
-                table.setWidths(new float[]{3, 2, 3, 2, 3});
-                addTableHeader(table, "Orden");
-                addTableHeader(table, "Consumidor Asociado");
+                table.setWidths(new float[]{1, 5, 2, 4, 2}); // 5 columnas
+                
+                // Columna "Orden"
+                addTableHeader(table, ""); // celda vacía para la columna "Orden"
+                
+                // Columna "Consumidor asociado" que ocupa 2 columnas
+                PdfPCell cell = new PdfPCell();
+                cell.setColspan(2);
+                
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.addElement(new Paragraph("CONSUMIDOR ASOCIADO", boldFont));
+                cell.addElement(new Paragraph("(titular del suministro)"));
+                table.addCell(cell);
+                
+                // Columna "NIF"
                 addTableHeader(table, "NIF");
+                
+                // Columna "CUPS"
                 addTableHeader(table, "CUPS");
-                addTableHeader(table, "Coeficiente de Reparto (ß)");
-              
+                
+                // Columna "Coeficiente de Reparto (ß)"
+                PdfPCell coefCell = new PdfPCell();
+                
+                coefCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                coefCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                coefCell.addElement(new Paragraph("COEFICIENTE", boldFont));
+                coefCell.addElement(new Paragraph("DE", boldFont));
+                coefCell.addElement(new Paragraph("REPARTO", boldFont));
+                coefCell.addElement(new Paragraph("(ß)", boldFont));
+                table.addCell(coefCell);
+                
                 int contador1 = 1;
                 for (ConexionEntity conexion : conexiones) {
+                    
                     table.addCell(String.valueOf(contador1++));
+                    
                     table.addCell(conexion.getInmueble().getSocio().getNombre() + " " +
                             conexion.getInmueble().getSocio().getApellido1() + " " +
                             conexion.getInmueble().getSocio().getApellido2());
@@ -192,6 +211,28 @@ document.add(new Paragraph("\n"));
 
                 document.add(new Paragraph("\n"));
             }
+
+            Paragraph parrafoFinal = new Paragraph();
+parrafoFinal.setAlignment(Element.ALIGN_JUSTIFIED);
+parrafoFinal.setSpacingBefore(20); // espacio antes
+parrafoFinal.setSpacingAfter(10); // espacio después
+
+parrafoFinal.add(new Phrase(
+    "Con la firma del presente acuerdo, los consumidores nos acogemos voluntariamente al "
+  + "mecanismo de compensación simplificada entre los déficits del consumo de cada consumidor "
+  + "y la totalidad de los excedentes de la instalación de autoconsumo, tal como establece el Real "
+  + "Decreto 244/2019, de 5 de abril.\n\n"
+  + "Les rogamos reciban esta comunicación y procedan a realizar los trámites necesarios.\n\n"
+  + "Del mismo modo, les solicitamos la aplicación del mecanismo de compensación simplificada de "
+  + "los excedentes de la instalación de autoconsumo a la que nos asociamos, y el inicio del "
+  + "mecanismo de compensación en el siguiente periodo de facturación desde la recepción de este "
+  + "acuerdo.\n\n"
+  + "En Valencia, a 14 de junio de 2022.\n\n"
+  + "Los CONSUMIDORES asociados:"
+));
+
+document.add(parrafoFinal);
+
 
         } catch (DocumentException e) {
             throw new IOException("Error al generar el PDF", e);
