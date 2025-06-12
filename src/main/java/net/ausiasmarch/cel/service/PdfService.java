@@ -51,6 +51,81 @@ public class PdfService {
             if (conexiones.isEmpty()) {
                 document.add(new Paragraph("No hay consumidores asociados a esta instalación.", boldFont));
             } else {
+
+                // 🔹 Generar Acuerdo de Reparto de Energía
+
+Paragraph titulo = new Paragraph("ACUERDO DE REPARTO DE ENERGÍA DE AUTOCONSUMO COLECTIVO", boldFont);
+titulo.setAlignment(Element.ALIGN_CENTER);
+document.add(titulo);
+
+Paragraph subtitulo1 = new Paragraph("INSTALACIONES CON EXCEDENTES", boldFont);
+subtitulo1.setAlignment(Element.ALIGN_CENTER);
+document.add(subtitulo1);
+
+Paragraph subtitulo2 = new Paragraph("ACOGIDAS A COMPENSACIÓN", boldFont);
+subtitulo2.setAlignment(Element.ALIGN_CENTER);
+document.add(subtitulo2);
+
+document.add(new Paragraph("\n"));
+
+Paragraph textoIntro = new Paragraph(
+    "En aplicación del Real Decreto 244/2019 de 5 de abril, los siguientes consumidores acordamos " +
+    "asociarnos a la instalación de *autoconsumo colectivo de energía eléctrica* con las siguientes características:",
+    
+);
+textoIntro.setAlignment(Element.ALIGN_JUSTIFIED);
+document.add(textoIntro);
+
+document.add(new Paragraph("\n"));
+
+// 🔹 Cuadro de selección "CON excedentes / Acogida a compensación"
+
+PdfPTable cuadro = new PdfPTable(2);
+cuadro.setWidthPercentage(50);
+cuadro.setSpacingBefore(10);
+cuadro.setHorizontalAlignment(Element.ALIGN_LEFT);
+cuadro.setWidths(new float[]{1, 5});
+
+// Celda con la X
+PdfPCell celdaX = new PdfPCell(new Phrase("X", boldFont));
+celdaX.setHorizontalAlignment(Element.ALIGN_CENTER);
+celdaX.setVerticalAlignment(Element.ALIGN_MIDDLE);
+celdaX.setFixedHeight(20);
+cuadro.addCell(celdaX);
+
+// Celda con el texto
+PdfPCell celdaTexto = new PdfPCell();
+celdaTexto.setPaddingLeft(10);
+celdaTexto.addElement(new Paragraph("CON excedentes", boldFont));
+celdaTexto.addElement(new Paragraph("Acogida a compensación"));
+cuadro.addCell(celdaTexto);
+
+document.add(cuadro);
+
+document.add(new Paragraph("\n"));
+
+// 🔹 Código de Autoconsumo (CAU)
+
+PdfPTable cauTable = new PdfPTable(2);
+cauTable.setWidthPercentage(100);
+cauTable.setSpacingBefore(20);
+cauTable.setWidths(new float[]{3, 7});
+
+PdfPCell cauLabel = new PdfPCell(new Phrase("CÓDIGO DE AUTOCONSUMO (CAU)", boldFont));
+cauLabel.setHorizontalAlignment(Element.ALIGN_CENTER);
+cauLabel.setVerticalAlignment(Element.ALIGN_MIDDLE);
+cauLabel.setFixedHeight(30);
+cauTable.addCell(cauLabel);
+
+PdfPCell cauValue = new PdfPCell(new Phrase("ES0135000361028305LA0FA001")); // aquí puedes parametrizar el CAU
+cauValue.setHorizontalAlignment(Element.ALIGN_CENTER);
+cauValue.setVerticalAlignment(Element.ALIGN_MIDDLE);
+cauValue.setFixedHeight(30);
+cauTable.addCell(cauValue);
+
+document.add(cauTable);
+
+document.add(new Paragraph("\n"));
                 // 🔹 Tabla resumen
                 PdfPTable table = new PdfPTable(5);
                 table.setWidthPercentage(100);
