@@ -231,13 +231,13 @@ document.add(new Paragraph("\n"));
             document.add(introProductores);
 
             // Crear la tabla (5 columnas)
-            PdfPTable productoresTable = new PdfPTable(5);
+            PdfPTable productoresTable = new PdfPTable(4);
             productoresTable.setWidthPercentage(100);
             productoresTable.setSpacingBefore(10);
             productoresTable.setWidths(new float[] { 1, 5, 2, 4, 2 });
 
             // Encabezados
-            addTableHeader(productoresTable, ""); // Orden
+            
             PdfPCell cellProd = new PdfPCell();
             cellProd.setColspan(2);
             cellProd.setBackgroundColor(new Color(220, 220, 220));
