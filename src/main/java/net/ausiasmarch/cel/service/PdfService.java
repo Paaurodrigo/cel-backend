@@ -70,7 +70,7 @@ document.add(new Paragraph("\n"));
 
 Paragraph textoIntro = new Paragraph(
     "En aplicación del Real Decreto 244/2019 de 5 de abril, los siguientes consumidores acordamos " +
-    "asociarnos a la instalación de *autoconsumo colectivo de energía eléctrica* con las siguientes características:",
+    "asociarnos a la instalación de *autoconsumo colectivo de energía eléctrica* con las siguientes características:"
     
 );
 textoIntro.setAlignment(Element.ALIGN_JUSTIFIED);
