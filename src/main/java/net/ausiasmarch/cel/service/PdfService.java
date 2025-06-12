@@ -148,18 +148,18 @@ document.add(new Paragraph("\n"));
 
                 PdfPCell cellNIF = new PdfPCell();
             
-                cell.setBackgroundColor(new Color(220, 220, 220)); // Color de java.awt.Color
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.addElement(new Paragraph("NIF", boldFont));
+                cellNIF.setBackgroundColor(new Color(220, 220, 220)); // Color de java.awt.Color
+                cellNIF.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellNIF.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cellNIF.addElement(new Paragraph("NIF", boldFont));
                 table.addCell(cellNIF);
       
                 PdfPCell cellCUPS = new PdfPCell();
            
-                cell.setBackgroundColor(new Color(220, 220, 220)); // Color de java.awt.Color
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.addElement(new Paragraph("CUPS", boldFont));
+                cellCUPS.setBackgroundColor(new Color(220, 220, 220)); // Color de java.awt.Color
+                cellCUPS.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellCUPS.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cellCUPS.addElement(new Paragraph("CUPS", boldFont));
                 table.addCell(cellCUPS);
     
                 // Columna "Coeficiente de Reparto (ß)"
@@ -167,7 +167,7 @@ document.add(new Paragraph("\n"));
                 
                 coefCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 coefCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cell.setBackgroundColor(new Color(220, 220, 220)); // Color de java.awt.Color
+                coefCell.setBackgroundColor(new Color(220, 220, 220)); // Color de java.awt.Color
                 coefCell.addElement(new Paragraph("COEFICIENTE DE REPARTO (ß)", boldFont));
                 table.addCell(coefCell);
                 
@@ -175,34 +175,34 @@ document.add(new Paragraph("\n"));
                 for (ConexionEntity conexion : conexiones) {
                     // Orden
                     PdfPCell cellOrden = new PdfPCell(new Phrase(String.valueOf(contador1++)));
-                    cellOrden.setPaddingTop(8);
-                    cellOrden.setPaddingBottom(8);
+                    cellOrden.setPaddingTop(12);
+                    cellOrden.setPaddingBottom(12);
                     table.addCell(cellOrden);
                 
                     // Nombre
                     PdfPCell cellNombre = new PdfPCell(new Phrase(conexion.getInmueble().getSocio().getNombre() + " " +
                                                                   conexion.getInmueble().getSocio().getApellido1() + " " +
                                                                   conexion.getInmueble().getSocio().getApellido2()));
-                    cellNombre.setPaddingTop(8);
-                    cellNombre.setPaddingBottom(8);
+                    cellNombre.setPaddingTop(12);
+                    cellNombre.setPaddingBottom(12);
                     table.addCell(cellNombre);
                 
                     // DNI
                     PdfPCell cellDni = new PdfPCell(new Phrase(conexion.getInmueble().getSocio().getDNI()));
-                    cellDni.setPaddingTop(8);
-                    cellDni.setPaddingBottom(8);
+                    cellDni.setPaddingTop(12);
+                    cellDni.setPaddingBottom(12);
                     table.addCell(cellDni);
                 
                     // CUPS
                     PdfPCell cellCups = new PdfPCell(new Phrase(conexion.getInmueble().getCups()));
-                    cellCups.setPaddingTop(8);
-                    cellCups.setPaddingBottom(8);
+                    cellCups.setPaddingTop(12);
+                    cellCups.setPaddingBottom(12);
                     table.addCell(cellCups);
                 
                     // Porcentaje
                     PdfPCell cellPorcentaje = new PdfPCell(new Phrase(String.format("%.3f%%", conexion.getPorcentaje())));
-                    cellPorcentaje.setPaddingTop(8);
-                    cellPorcentaje.setPaddingBottom(8);
+                    cellPorcentaje.setPaddingTop(12);
+                    cellPorcentaje.setPaddingBottom(12);
                     table.addCell(cellPorcentaje);
                 }
                 
