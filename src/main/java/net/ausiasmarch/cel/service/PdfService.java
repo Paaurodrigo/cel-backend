@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -23,7 +24,9 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class PdfService {
     LocalDate fechaHoy = LocalDate.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy"); // ejemplo: 12 de junio de 2025
+   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy")
+                                                .withLocale(new Locale("es", "ES"));
+
     String fechaFormateada = fechaHoy.format(formatter);
     
     private final ConexionRepository conexionRepository;
@@ -127,7 +130,7 @@ document.add(cauTable);
 
 document.add(new Paragraph("\n"));
                 // 🔹 Tabla resumen
-                PdfPTable table = new PdfPTable(4);
+                PdfPTable table = new PdfPTable(5);
                 table.setWidthPercentage(100);
                 table.setSpacingBefore(10);
                 table.setWidths(new float[]{1, 5, 2, 4, 2}); // 5 columnas
