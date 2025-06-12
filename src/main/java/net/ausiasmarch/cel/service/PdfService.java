@@ -176,7 +176,7 @@ document.add(new Paragraph("\n"));
                 coefCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 coefCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 coefCell.setBackgroundColor(new Color(220, 220, 220)); // Color de java.awt.Color
-                coefCell.addElement(new Paragraph("COEFICIENTE DE REPARTO (ß)", boldFont));
+                coefCell.addElement(new Paragraph("COEF. DE REPARTO (ß)", boldFont));
                 table.addCell(coefCell);
                 
                 int contador1 = 1;
@@ -208,7 +208,7 @@ document.add(new Paragraph("\n"));
                     table.addCell(cellCups);
                 
                     // Porcentaje
-                    PdfPCell cellPorcentaje = new PdfPCell(new Phrase(String.format("%.3f%%", conexion.getPorcentaje())));
+                    PdfPCell cellPorcentaje = new PdfPCell(new Phrase(String.format("%.5f", conexion.getPorcentaje())));
                     cellPorcentaje.setPaddingTop(12);
                     cellPorcentaje.setPaddingBottom(12);
                     table.addCell(cellPorcentaje);
@@ -278,7 +278,14 @@ document.add(new Paragraph("\n"));
                 document.add(new Paragraph("\n"));
             }
 
-          
+
+            
+            Paragraph productorheader = new Paragraph("Los PRODUCTORES asociados:", boldFont);
+            productorheader.setSpacingAfter(10);
+            document.add(productorheader);
+            document.add(new Paragraph("PRODUCTOR 1:" + "\n \n"  ));
+            document.add(new Paragraph("NIF:" + "\n"));
+
 
 
         } catch (DocumentException e) {
