@@ -219,6 +219,72 @@ document.add(new Paragraph("\n"));
                 document.add(new Paragraph("\n"));
             }
 
+            // Añadir un espacio antes de la tabla
+            document.add(new Paragraph("\n"));
+
+            // Añadir texto introductorio
+            Paragraph introProductores = new Paragraph(
+                    "(Si existen varios productores con instalaciones de generación asociadas al autoconsumo, completar para cada uno de ellos)"
+                    );
+            introProductores.setAlignment(Element.ALIGN_LEFT);
+            introProductores.setSpacingAfter(10);
+            document.add(introProductores);
+
+            // Crear la tabla (5 columnas)
+            PdfPTable productoresTable = new PdfPTable(5);
+            productoresTable.setWidthPercentage(100);
+            productoresTable.setSpacingBefore(10);
+            productoresTable.setWidths(new float[] { 1, 6, 2, 4, 1 });
+
+            // Encabezados
+            addTableHeader(productoresTable, ""); // Orden
+            PdfPCell cellProd = new PdfPCell();
+            cellProd.setColspan(1);
+            cellProd.setBackgroundColor(new Color(220, 220, 220));
+            cellProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellProd.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cellProd.addElement(new Paragraph("PRODUCTOR ASOCIADO", boldFont));
+            cellProd.addElement(new Paragraph("(titular de la instalación de generación)"));
+            productoresTable.addCell(cellProd);
+
+            addTableHeader(productoresTable, "NIF");
+            addTableHeader(productoresTable, "CIL");
+            PdfPCell cellCoef = new PdfPCell();
+            cellCoef.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellCoef.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cellCoef.setBackgroundColor(new Color(220, 220, 220));
+            cellCoef.addElement(new Paragraph("COEFICIENTE", boldFont));
+            cellCoef.addElement(new Paragraph("(α)", boldFont));
+            productoresTable.addCell(cellCoef);
+
+         
+            // Fila vacía (fila 2 vacía como en tu imagen)
+            PdfPCell cellOrden2 = new PdfPCell(new Phrase("1"));
+            cellOrden2.setFixedHeight(120); // 4 cm
+            productoresTable.addCell(cellOrden2);
+
+            PdfPCell cellProd2 = new PdfPCell(new Phrase(""));
+            cellProd2.setFixedHeight(120); // 4 cm
+            productoresTable.addCell(cellProd2);
+
+            PdfPCell cellNif2 = new PdfPCell(new Phrase(""));
+            cellNif2.setFixedHeight(120); // 4 cm
+            productoresTable.addCell(cellNif2);
+
+            PdfPCell cellCil2 = new PdfPCell(new Phrase(""));
+            cellCil2.setFixedHeight(120); // 4 cm
+            productoresTable.addCell(cellCil2);
+
+            PdfPCell cellCoef2 = new PdfPCell(new Phrase(""));
+            cellCoef2.setFixedHeight(120); // 4 cm
+            productoresTable.addCell(cellCoef2);
+
+            // Añadir la tabla al documento
+            document.add(productoresTable);
+
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
+
             Paragraph parrafoMitad = new Paragraph();
             parrafoMitad.setAlignment(Element.ALIGN_JUSTIFIED);
             parrafoMitad.setSpacingBefore(20); // espacio antes
@@ -256,7 +322,8 @@ document.add(new Paragraph("\n"));
                 document.add(new Paragraph("NIF:  " + conexion.getInmueble().getSocio().getDNI()));
                 document.add(new Paragraph("CUPS: " + conexion.getInmueble().getCups()));
                 document.add(new Paragraph("Porcentaje de reparto del autoconsumo colectivo: " +
-                        String.format("%.3f%%", conexion.getPorcentaje())));
+                String.format("%.3f%%", conexion.getPorcentaje() * 100)));
+            
                 document.add(new Paragraph("Firma:\n"));
 
                 if (conexion.getFirma() != null && !conexion.getFirma().isEmpty()) {
@@ -277,13 +344,13 @@ document.add(new Paragraph("\n"));
 
                 document.add(new Paragraph("\n"));
             }
-
+            document.newPage();
 
             
             Paragraph productorheader = new Paragraph("Los PRODUCTORES asociados:", boldFont);
             productorheader.setSpacingAfter(10);
             document.add(productorheader);
-            document.add(new Paragraph("PRODUCTOR 1:" + "\n \n"  ));
+            document.add(new Paragraph("PRODUCTOR 1:" + "\n \n \n \n \n "  ));
             document.add(new Paragraph("NIF:" + "\n"));
 
 
