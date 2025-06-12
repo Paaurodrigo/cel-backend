@@ -130,13 +130,13 @@ document.add(cauTable);
 
 document.add(new Paragraph("\n"));
                 // 🔹 Tabla resumen
-                PdfPTable table = new PdfPTable(5);
+                PdfPTable table = new PdfPTable(4);
                 table.setWidthPercentage(100);
                 table.setSpacingBefore(10);
                 table.setWidths(new float[]{1, 5, 2, 4, 2}); // 5 columnas
                 
                 // Columna "Orden"
-                addTableHeader(table, ""); // celda vacía para la columna "Orden"
+             
                 
                 // Columna "Consumidor asociado" que ocupa 2 columnas
                 PdfPCell cell = new PdfPCell();
