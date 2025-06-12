@@ -29,6 +29,7 @@ public class PdfService {
 
     String fechaFormateada = fechaHoy.format(formatter);
     
+    
     private final ConexionRepository conexionRepository;
 
     public PdfService(ConexionRepository conexionRepository) {
@@ -52,7 +53,14 @@ public class PdfService {
             if (conexiones.isEmpty()) {
                 document.add(new Paragraph("No hay consumidores asociados a esta instalación.", boldFont));
             } else {
+                String cau = null;
 
+                if (!conexiones.isEmpty()) {
+                    cau = conexiones.get(0).getInstalacion().getCau();
+                } else {
+                    cau = "CAU NO DISPONIBLE";
+                }
+                
                 // 🔹 Generar Acuerdo de Reparto de Energía
 
 Paragraph titulo = new Paragraph("ACUERDO DE REPARTO DE ENERGÍA DE AUTOCONSUMO COLECTIVO", boldFont);
@@ -120,7 +128,7 @@ cauTable.addCell(cauLabel);
 
 
 
-PdfPCell cauValue = new PdfPCell(new Phrase("ES0135000361028305LA0FA001")); // aquí puedes parametrizar el CAU
+PdfPCell cauValue = new PdfPCell(new Phrase(cau)); // NO te olvides de cerrar el paréntesis!
 cauValue.setHorizontalAlignment(Element.ALIGN_CENTER);
 cauValue.setVerticalAlignment(Element.ALIGN_MIDDLE);
 cauValue.setFixedHeight(30);
