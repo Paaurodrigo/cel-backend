@@ -130,7 +130,7 @@ document.add(cauTable);
 
 document.add(new Paragraph("\n"));
                 // 🔹 Tabla resumen
-                PdfPTable table = new PdfPTable(4);
+                PdfPTable table = new PdfPTable(5);
                 table.setWidthPercentage(100);
                 table.setSpacingBefore(10);
                 table.setWidths(new float[]{1, 5, 2, 4, 2}); // 5 columnas
