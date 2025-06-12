@@ -216,12 +216,12 @@ document.add(new Paragraph("\n"));
                 
 
                 document.add(table);
-                document.add(new Paragraph("\n"));
+                
             }
 
-            // Añadir un espacio antes de la tabla
-            document.add(new Paragraph("\n"));
-
+            
+           
+            document.newPage();
             // Añadir texto introductorio
             Paragraph introProductores = new Paragraph(
                     "(Si existen varios productores con instalaciones de generación asociadas al autoconsumo, completar para cada uno de ellos)"
@@ -234,12 +234,12 @@ document.add(new Paragraph("\n"));
             PdfPTable productoresTable = new PdfPTable(5);
             productoresTable.setWidthPercentage(100);
             productoresTable.setSpacingBefore(10);
-            productoresTable.setWidths(new float[] { 1, 6, 2, 4, 1 });
+            productoresTable.setWidths(new float[] { 1, 5, 2, 4, 2 });
 
             // Encabezados
             addTableHeader(productoresTable, ""); // Orden
             PdfPCell cellProd = new PdfPCell();
-            cellProd.setColspan(1);
+            cellProd.setColspan(2);
             cellProd.setBackgroundColor(new Color(220, 220, 220));
             cellProd.setHorizontalAlignment(Element.ALIGN_CENTER);
             cellProd.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -283,7 +283,7 @@ document.add(new Paragraph("\n"));
             document.add(productoresTable);
 
             document.add(new Paragraph("\n"));
-            document.add(new Paragraph("\n"));
+            
 
             Paragraph parrafoMitad = new Paragraph();
             parrafoMitad.setAlignment(Element.ALIGN_JUSTIFIED);
