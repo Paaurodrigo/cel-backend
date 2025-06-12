@@ -14,10 +14,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+
+
 
 @Service
 public class PdfService {
-
+    LocalDate fechaHoy = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy"); // ejemplo: 12 de junio de 2025
+    String fechaFormateada = fechaHoy.format(formatter);
+    
     private final ConexionRepository conexionRepository;
 
     public PdfService(ConexionRepository conexionRepository) {
@@ -99,7 +107,7 @@ document.add(new Paragraph("\n"));
 PdfPTable cauTable = new PdfPTable(2);
 cauTable.setWidthPercentage(100);
 cauTable.setSpacingBefore(20);
-cauTable.setWidths(new float[]{6, 4});
+cauTable.setWidths(new float[]{1, 1});
 
 PdfPCell cauLabel = new PdfPCell(new Phrase("CÓDIGO DE AUTOCONSUMO (CAU)", boldFont));
 cauLabel.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -119,7 +127,7 @@ document.add(cauTable);
 
 document.add(new Paragraph("\n"));
                 // 🔹 Tabla resumen
-                PdfPTable table = new PdfPTable(5);
+                PdfPTable table = new PdfPTable(4);
                 table.setWidthPercentage(100);
                 table.setSpacingBefore(10);
                 table.setWidths(new float[]{1, 5, 2, 4, 2}); // 5 columnas
@@ -130,7 +138,7 @@ document.add(new Paragraph("\n"));
                 // Columna "Consumidor asociado" que ocupa 2 columnas
                 PdfPCell cell = new PdfPCell();
                 cell.setColspan(2);
-                
+                cell.setBackgroundColor(new Color(220, 220, 220)); // Color de java.awt.Color
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cell.addElement(new Paragraph("CONSUMIDOR ASOCIADO", boldFont));
@@ -174,6 +182,27 @@ document.add(new Paragraph("\n"));
                 document.add(new Paragraph("\n"));
             }
 
+            Paragraph parrafoMitad = new Paragraph();
+            parrafoMitad.setAlignment(Element.ALIGN_JUSTIFIED);
+            parrafoMitad.setSpacingBefore(20); // espacio antes
+            parrafoMitad.setSpacingAfter(10); // espacio después
+            
+            parrafoMitad.add(new Phrase(
+                "Con la firma del presente acuerdo, los consumidores nos acogemos voluntariamente al "
+              + "mecanismo de compensación simplificada entre los déficits del consumo de cada consumidor "
+              + "y la totalidad de los excedentes de la instalación de autoconsumo, tal como establece el Real "
+              + "Decreto 244/2019, de 5 de abril.\n\n"
+              + "Les rogamos reciban esta comunicación y procedan a realizar los trámites necesarios.\n\n"
+              + "Del mismo modo, les solicitamos la aplicación del mecanismo de compensación simplificada de "
+              + "los excedentes de la instalación de autoconsumo a la que nos asociamos, y el inicio del "
+              + "mecanismo de compensación en el siguiente periodo de facturación desde la recepción de este "
+              + "acuerdo.\n\n"
+              + "En Valencia, a " + fechaFormateada + ".\n\n"
+              + "Los CONSUMIDORES asociados:"
+            ));
+            
+            document.add(parrafoMitad);
+
             // 🔹 Página individual por consumidor
             int contador = 1;
             for (ConexionEntity conexion : conexiones) {
@@ -212,26 +241,7 @@ document.add(new Paragraph("\n"));
                 document.add(new Paragraph("\n"));
             }
 
-            Paragraph parrafoFinal = new Paragraph();
-parrafoFinal.setAlignment(Element.ALIGN_JUSTIFIED);
-parrafoFinal.setSpacingBefore(20); // espacio antes
-parrafoFinal.setSpacingAfter(10); // espacio después
-
-parrafoFinal.add(new Phrase(
-    "Con la firma del presente acuerdo, los consumidores nos acogemos voluntariamente al "
-  + "mecanismo de compensación simplificada entre los déficits del consumo de cada consumidor "
-  + "y la totalidad de los excedentes de la instalación de autoconsumo, tal como establece el Real "
-  + "Decreto 244/2019, de 5 de abril.\n\n"
-  + "Les rogamos reciban esta comunicación y procedan a realizar los trámites necesarios.\n\n"
-  + "Del mismo modo, les solicitamos la aplicación del mecanismo de compensación simplificada de "
-  + "los excedentes de la instalación de autoconsumo a la que nos asociamos, y el inicio del "
-  + "mecanismo de compensación en el siguiente periodo de facturación desde la recepción de este "
-  + "acuerdo.\n\n"
-  + "En Valencia, a 14 de junio de 2022.\n\n"
-  + "Los CONSUMIDORES asociados:"
-));
-
-document.add(parrafoFinal);
+          
 
 
         } catch (DocumentException e) {
