@@ -110,41 +110,30 @@ public class InstalacionService {
 
     public InstalacionEntity update(InstalacionEntity oInstalacionEntity) {
         InstalacionEntity oInstalacionEntityFromDatabase = oInstalacionRepository.findById(oInstalacionEntity.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Instalación no encontrada"));
-    
+                .get();
+
         if (oInstalacionEntity.getNombre() != null) {
             oInstalacionEntityFromDatabase.setNombre(oInstalacionEntity.getNombre());
         }
-    
         if (oInstalacionEntity.getPaneles() != null) {
             oInstalacionEntityFromDatabase.setPaneles(oInstalacionEntity.getPaneles());
         }
-    
         if (oInstalacionEntity.getPotenciaPanel() != null) {
             oInstalacionEntityFromDatabase.setPotenciaPanel(oInstalacionEntity.getPotenciaPanel());
         }
-    
         if (oInstalacionEntity.getPotenciaTotal() != null) {
             oInstalacionEntityFromDatabase.setPotenciaTotal(oInstalacionEntity.getPotenciaTotal());
-    
-            // ✅ Cuando cambias PotenciaTotal, se iguala PotenciaDisponible
-            oInstalacionEntityFromDatabase.setPotenciaDisponible(oInstalacionEntity.getPotenciaTotal());
-    
-          
-        } else if (oInstalacionEntity.getPotenciaDisponible() != null) {
-            // Si no cambias potenciaTotal pero mandas potenciaDisponible → se actualiza normal
-            oInstalacionEntityFromDatabase.setPotenciaDisponible(oInstalacionEntity.getPotenciaDisponible());
-    
-            
         }
-    
+        if (oInstalacionEntity.getPotenciaDisponible() != null) {
+            oInstalacionEntityFromDatabase.setPotenciaDisponible(oInstalacionEntity.getPotenciaTotal());
+        }
         if (oInstalacionEntity.getPrecioKw() != null) {
             oInstalacionEntityFromDatabase.setPrecioKw(oInstalacionEntity.getPrecioKw());
         }
-    
+
         return oInstalacionRepository.save(oInstalacionEntityFromDatabase);
     }
-    
+
     public Long deleteAll() {
         oInstalacionRepository.deleteAll();
         return this.count();
