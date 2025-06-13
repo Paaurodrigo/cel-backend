@@ -125,7 +125,7 @@ public class InstalacionService {
             oInstalacionEntityFromDatabase.setPotenciaTotal(oInstalacionEntity.getPotenciaTotal());
         }
         if (oInstalacionEntity.getPotenciaDisponible() != null) {
-            oInstalacionEntityFromDatabase.setPotenciaDisponible(oInstalacionEntity.getPotenciaDisponible());
+            oInstalacionEntityFromDatabase.setPotenciaDisponible(oInstalacionEntity.getPotenciaTotal());
         }
         if (oInstalacionEntity.getPrecioKw() != null) {
             oInstalacionEntityFromDatabase.setPrecioKw(oInstalacionEntity.getPrecioKw());
@@ -165,7 +165,7 @@ public class InstalacionService {
                 return oInstalacionRepository.findAll(oPageable);
             }
         }
-    }
+    } 
 
     public boolean existsByCau(String cau) {
         return oInstalacionRepository.existsByCau(cau);
