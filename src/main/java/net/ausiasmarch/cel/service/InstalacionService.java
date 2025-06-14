@@ -125,7 +125,7 @@ public class InstalacionService {
             oInstalacionEntityFromDatabase.setPotenciaTotal(oInstalacionEntity.getPotenciaTotal());
         }
         if (oInstalacionEntity.getPotenciaDisponible() != null) {
-            oInstalacionEntityFromDatabase.setPotenciaDisponible(oInstalacionEntity.getPotenciaTotal());
+            oInstalacionEntityFromDatabase.setPotenciaDisponible(oInstalacionEntity.getPotenciaDisponible());
         }
         if (oInstalacionEntity.getPrecioKw() != null) {
             oInstalacionEntityFromDatabase.setPrecioKw(oInstalacionEntity.getPrecioKw());
