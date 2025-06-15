@@ -138,11 +138,16 @@ public class ConexionService implements ServiceInterface<ConexionEntity> {
                 + "Le recordamos que aún no ha firmado la autorización para la conexión entre su inmueble y la instalación de autoconsumo.\n\n"
                 + "Se ha enviado nuevamente la solicitud de firma. Es imprescindible que complete este proceso para mantener activa la conexión.\n"
                 + "Si no realiza la firma en el plazo establecido, la conexión será cancelada automáticamente.\n\n"
-                + "Por favor, haga clic en el siguiente enlace para firmar la autorización:\n\n"
-                + "https://www.solarcel.online/conexion/firma/" + conexionEntity.getId() + "\n\n"
-                 + "localhost:4200/conexion/firma/" + conexionEntity.getId() + "\n\n"
-                + "Gracias por su colaboración.\n"
-                + "Comunidad Energética Local.";
+                + "Para continuar con el proceso, por favor, haga clic en el siguiente enlace para firmar la autorización:\n\n"
+            + "https://www.solarcel.online/conexion/firma/" + conexionEntity.getId() + "\n\n"
+            + "Una vez haya firmado, el siguiente paso será realizar la transferencia bancaria al siguiente número de cuenta:\n"
+            + "IBAN: ES00 0000 0000 0000 0000 0000\n\n"
+            + "El ID de la conexion es " + conexionEntity.getId() + ".\n"
+            + "Por favor, incluya en el concepto de la transferencia su nombre y el ID de la conexión.\n\n"
+            + "El importe sera de " + conexionEntity.getPotencia()*conexionEntity.getInstalacion().getPrecioKw() + " euros.\n"
+            + "Gracias por su colaboración.\n"
+            + "Atentamente,\n"
+            + "Comunidad Energética Local.";
         
 
         // **📧 Enviar el correo**
